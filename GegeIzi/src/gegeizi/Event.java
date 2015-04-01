@@ -5,6 +5,8 @@
  */
 package gegeizi;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author user
@@ -17,6 +19,15 @@ public class Event {
     
     public Event(){
         
+    }
+    
+    public Event(JSONObject obj){
+        //Strings
+        eventType = (String) obj.get("eventType");
+        //ints
+        itemId = (int) obj.get("itemID");
+        participantId = (int) obj.get("participantId");
+        timeStamp = (int) obj.get("timestamp");
     }
 
     public String getEventType() {

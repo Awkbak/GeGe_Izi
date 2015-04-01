@@ -6,6 +6,8 @@
 package gegeizi;
 
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -28,7 +30,39 @@ public class Match {
     private MatchTimeline timeline;
     
     public void Match(){
+        //Initialize ArrayLists
         teams = new ArrayList<>();
+    }
+    
+    public void Match(JSONObject obj){
+        //Initialize ArrayLists
+        teams = new ArrayList<>();
+        //Int
+        mapId = (int) obj.get("mapId");
+        matchDuration = (int) obj.get("matchDuration");
+        //Long
+        matchCreation = (long) obj.get("matchCreation");
+        matchId = (long) obj.get("matchId");
+        //String
+        matchMode = (String) obj.get("matchMode");
+        matchType = (String) obj.get("matchType");
+        matchVersion = (String) obj.get("matchVersion");
+        platformId = (String) obj.get("platformId");
+        queueType = (String) obj.get("queueType");
+        region = (String) obj.get("region");
+        season = (String) obj.get("season");
+        //Objects
+        timeline = new MatchTimeline((JSONObject) obj.get("timeline"));
+        //Arrays
+        JSONArray arr = (JSONArray) obj.get("participants");
+        for (Object arr1 : arr) {
+            participants.add(new Participant((JSONObject) arr1));
+        }
+        
+        arr = (JSONArray) obj.get("teams");
+        for (Object arr1 : arr) {
+            teams.add(new Team((JSONObject) arr1));
+        }
     }
 
     public int getMapId() {

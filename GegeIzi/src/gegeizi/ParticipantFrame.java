@@ -5,13 +5,15 @@
  */
 package gegeizi;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author user
  */
 public class ParticipantFrame {
     
-    private int ParticipantId;
+    private int participantId;
     private int currentGold;
     private int dominionScore;
     private int jungleMinionsKilled;
@@ -25,13 +27,28 @@ public class ParticipantFrame {
     public ParticipantFrame(){
         
     }
+    
+    public ParticipantFrame(JSONObject obj){
+        //ints
+        participantId = (int) obj.get("participantId");
+        currentGold = (int) obj.get("currentGold");
+        dominionScore = (int) obj.get("dominionScore");
+        jungleMinionsKilled = (int) obj.get("jungleMinionsKilled");
+        level = (int) obj.get("level");
+        minionsKilled = (int) obj.get("minionsKilled");
+        teamScore = (int) obj.get("teamScore");
+        totalGold = (int) obj.get("totalGold");
+        xp = (int) obj.get("xp");
+        //Objects
+        position = new Position((JSONObject) obj.get("position"));
+    }
 
     public int getParticipantId() {
-        return ParticipantId;
+        return participantId;
     }
 
     public void setParticipantId(int ParticipantId) {
-        this.ParticipantId = ParticipantId;
+        this.participantId = ParticipantId;
     }
 
     public int getCurrentGold() {

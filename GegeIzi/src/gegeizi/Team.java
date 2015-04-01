@@ -6,6 +6,8 @@
 package gegeizi;
 
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -16,7 +18,7 @@ public class Team {
     private int teamId;
     private ArrayList<BanTuple> bans;
     private int baronKills;
-    private int dominionVIctoryScore;
+    private int dominionVictoryScore;
     private int dragonKills;
     private boolean firstBaron;
     private boolean firstBlood;
@@ -29,9 +31,33 @@ public class Team {
     private boolean winner;
     
     public Team(){
+        bans = new ArrayList<>();        
+    }
+    
+    public Team(JSONObject obj){
+        //Initialize ArrayLists
         bans = new ArrayList<>();
         
-        
+        //ints
+        teamId = (int) obj.get("teamId");
+        baronKills = (int) obj.get("baronKills");
+        dominionVictoryScore = (int) obj.get("dominionVictoryScore");       
+        dragonKills = (int) obj.get("dragonKills");
+        inhibitorKills = (int) obj.get("inhibitorKills");
+        towerKills = (int) obj.get("towerKills");
+        vileMawKills = (int) obj.get("vileMawKills");
+        //booleans
+        winner = (boolean) obj.get("winner");
+        firstBaron = (boolean) obj.get("firstBaron");
+        firstBlood = (boolean) obj.get("firstBlood");
+        firstDragon = (boolean) obj.get("firstDragon");
+        firstInhibitor = (boolean) obj.get("firstInhibitor");
+        firstTower = (boolean) obj.get("firstTower");
+        //arrays
+        JSONArray arr = (JSONArray) obj.get("bans");
+        for (Object arr1 : arr) {
+            bans.add(new BanTuple((JSONObject) arr1));
+        }
     }
 
     public int getTeamId() {
@@ -58,12 +84,12 @@ public class Team {
         this.baronKills = baronKills;
     }
 
-    public int getDominionVIctoryScore() {
-        return dominionVIctoryScore;
+    public int getDominionVictoryScore() {
+        return dominionVictoryScore;
     }
 
-    public void setDominionVIctoryScore(int dominionVIctoryScore) {
-        this.dominionVIctoryScore = dominionVIctoryScore;
+    public void setDominionVictoryScore(int dominionVictoryScore) {
+        this.dominionVictoryScore = dominionVictoryScore;
     }
 
     public int getDragonKills() {

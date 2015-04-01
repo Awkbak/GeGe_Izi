@@ -6,6 +6,8 @@
 package gegeizi;
 
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -18,6 +20,18 @@ public class MatchTimeline {
     
     public MatchTimeline(){
         frames = new ArrayList<>();
+    }
+    
+    public MatchTimeline(JSONObject obj){
+        //Initializing ArrayLists
+        frames = new ArrayList<>();
+        //ints
+        frameInterval = (int) obj.get("frameInterval");
+        //Arrays
+        JSONArray arr = (JSONArray) obj.get("frames");
+        for(int e = 0; e < arr.size(); e ++){
+            frames.add(new Frame((JSONObject) arr.get(e)));
+        }
     }
 
     public int getFrameInterval() {

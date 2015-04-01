@@ -6,6 +6,8 @@
 package gegeizi;
 
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -30,6 +32,30 @@ public class Participant {
         runes = new ArrayList<>();
     }
 
+    public Participant(JSONObject obj){
+        //Initialize ArrayLists
+        masteries = new ArrayList<>();
+        runes = new ArrayList<>();
+        //ints
+        participantId = (int) obj.get("participantId");
+        championId = (int) obj.get("championId");
+        teamId = (int) obj.get("teamId");
+        spell1Id = (int) obj.get("spell1Id");
+        spell2Id = (int) obj.get("spell2Id");
+        //Objects
+        timeline = new ParticipantTimeline((JSONObject) obj.get("timeline"));
+        //Arrays
+        JSONArray arr = (JSONArray) obj.get("masteries");
+        for (Object arr1 : arr) {
+            masteries.add(new RuneMastery((JSONObject) arr1, "Mastery"));
+        }
+        
+        arr = (JSONArray) obj.get("runes");
+        for (Object arr1 : arr) {
+            runes.add(new RuneMastery((JSONObject) arr1, "Rune"));
+        }
+    }
+    
     public int getParticipantId() {
         return participantId;
     }

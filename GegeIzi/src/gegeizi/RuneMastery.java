@@ -5,6 +5,8 @@
  */
 package gegeizi;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author user
@@ -15,6 +17,18 @@ public class RuneMastery {
     
     public RuneMastery(){
         
+    }
+    
+    public RuneMastery(JSONObject obj, String type){
+        //ints
+        rank = (int) obj.get("rank");
+        //Make surte to find the right variable (class controls Runes and Masteries)
+        if(type.equals("Rune")){
+            id = (int) obj.get("runeId");
+        }
+        else{
+            id = (int) obj.get("masteryId");
+        }
     }
 
     public int getId() {

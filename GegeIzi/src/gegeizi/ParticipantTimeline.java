@@ -5,6 +5,8 @@
  */
 package gegeizi;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author user
@@ -23,6 +25,20 @@ public class ParticipantTimeline {
     
     public ParticipantTimeline(){
         
+    }
+    
+    public ParticipantTimeline(JSONObject obj){
+        //Strings
+        lane = (String) obj.get("lane");
+        role = (String) obj.get("role");
+        //Objects
+        creepsPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("creepsPerMinDeltas"));
+        csDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("csDiffPerMinDeltas"));
+        damageTakenDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("damageTakenDiffPerMinDeltas"));
+        damageTakenPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("damageTakenPerMinDeltas"));
+        goldPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("goldPerMinDeltas"));
+        xpDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("xpDiffPerMinDeltas"));
+        xpPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("xpPerMinDeltas"));
     }
 
     public String getLane() {

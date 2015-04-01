@@ -5,6 +5,8 @@
  */
 package gegeizi;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author user
@@ -15,6 +17,12 @@ public class ParticipantTimelineTuple {
     
     public ParticipantTimelineTuple(){
         
+    }
+    
+    public ParticipantTimelineTuple(JSONObject obj){
+        //doubles
+        tenToTwenty = (double) obj.get("tenToTwenty");
+        zeroToTen = (double) obj.get("zeroToTen");
     }
 
     public double getTenToTwenty() {

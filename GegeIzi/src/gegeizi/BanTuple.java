@@ -5,6 +5,8 @@
  */
 package gegeizi;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author user
@@ -15,6 +17,12 @@ public class BanTuple {
     
     public BanTuple(){
         
+    }
+    
+    public BanTuple(JSONObject obj){
+        //ints
+        championId = (int) obj.get("championId");
+        pickTurn = (int) obj.get("pickTurn");
     }
 
     public int getChampionId() {

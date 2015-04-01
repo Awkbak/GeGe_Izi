@@ -5,6 +5,8 @@
  */
 package gegeizi;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author user
@@ -20,6 +22,12 @@ public class Position {
     
     public Position(){
         
+    }
+    
+    public Position(JSONObject obj){
+        //ints
+        x = (int) obj.get("x");
+        y = (int) obj.get("y");
     }
 
     public int getX() {
