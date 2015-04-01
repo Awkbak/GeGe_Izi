@@ -30,6 +30,8 @@ public class Team {
     
     public Team(){
         bans = new ArrayList<>();
+        
+        
     }
 
     public int getTeamId() {
