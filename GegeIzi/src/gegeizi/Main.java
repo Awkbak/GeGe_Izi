@@ -44,4 +44,24 @@ public class Main extends Application {
         launch(args);
     }
     
+    
+    //Used to access the riot api
+    class CallAPI implements Runnable{
+        //url to retrieve from
+        public RequestParams params;
+        
+        public CallAPI(RequestParams params){
+            this.params = params;
+        }
+        
+        //
+        @Override
+        public void run() {
+            
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+        
+    }
+    
 }
