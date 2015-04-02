@@ -1,6 +1,6 @@
-/**©Murilo Costa
- * GeGe Izi
- * Goal: To create a convenient tool for streamers to show and analyze their stats.
+/**©Awkbak BR, BobJrSenior
+ * Sounds of URF
+ * Goal: To create an App that generates a sound sequence based off the outcome of game IDs
  * Using Riot's API to create this app.
  * Start Date: 3/27/2015
  */
@@ -19,7 +19,9 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.net.ssl.HttpsURLConnection;
 
@@ -28,7 +30,7 @@ import javax.net.ssl.HttpsURLConnection;
  * @author Awkbak
  */
 public class Main extends Application {
-    
+    Keyboard mainKeyboard;
     
     ExecutorService threadpool;
     
@@ -36,19 +38,24 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         threadpool = Executors.newFixedThreadPool(4);
         
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        String[] kek = new String[10];
+        for(int i =0;i<10;i++){
+            kek[i] = "test.mp3";
+        }
+        mainKeyboard = new Keyboard(kek);
+        Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
+        Button btn = new Button("",new ImageView(img));
         btn.setOnAction((ActionEvent event) -> {
-            System.out.println("Hello World!");
+            mainKeyboard.PlaySound(1);
             CallAPI test = new CallAPI("https://na.api.pvp.net/api/lol/na/v2.2/match/1778704162?includeTimeline=true&api_key=04e61b3a-f876-4fc6-bc1e-1e5f3c6fc2af");
             threadpool.execute(test);
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        Pane root = new Pane();
+        root.getChildren().addAll(mainKeyboard,btn);
         
-        Scene scene = new Scene(root, 300, 250);
-        
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
