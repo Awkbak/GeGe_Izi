@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
  */
 public class MatchTimeline {
     
-    private int frameInterval;
+    private long frameInterval;
     private ArrayList<Frame> frames;
     
     public MatchTimeline(){
@@ -26,7 +26,7 @@ public class MatchTimeline {
         //Initializing ArrayLists
         frames = new ArrayList<>();
         //ints
-        frameInterval = (int) obj.get("frameInterval");
+        frameInterval = (long) obj.get("frameInterval");
         //Arrays
         JSONArray arr = (JSONArray) obj.get("frames");
         for(int e = 0; e < arr.size(); e ++){
@@ -34,11 +34,11 @@ public class MatchTimeline {
         }
     }
 
-    public int getFrameInterval() {
+    public long getFrameInterval() {
         return frameInterval;
     }
 
-    public void setFrameInterval(int frameInterval) {
+    public void setFrameInterval(long frameInterval) {
         this.frameInterval = frameInterval;
     }
 

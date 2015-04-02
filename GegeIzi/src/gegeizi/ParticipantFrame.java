@@ -13,81 +13,83 @@ import org.json.simple.JSONObject;
  */
 public class ParticipantFrame {
     
-    private int participantId;
-    private int currentGold;
-    private int dominionScore;
-    private int jungleMinionsKilled;
-    private int level;
-    private int minionsKilled;
+    private long participantId;
+    private long currentGold;
+    private long dominionScore;
+    private long jungleMinionsKilled;
+    private long level;
+    private long minionsKilled;
     private Position position;
-    private int teamScore;
-    private int totalGold;
-    private int xp;
+    private long teamScore;
+    private long totalGold;
+    private long xp;
     
     public ParticipantFrame(){
         
     }
     
     public ParticipantFrame(JSONObject obj){
-        //ints
-        participantId = (int) obj.get("participantId");
-        currentGold = (int) obj.get("currentGold");
-        dominionScore = (int) obj.get("dominionScore");
-        jungleMinionsKilled = (int) obj.get("jungleMinionsKilled");
-        level = (int) obj.get("level");
-        minionsKilled = (int) obj.get("minionsKilled");
-        teamScore = (int) obj.get("teamScore");
-        totalGold = (int) obj.get("totalGold");
-        xp = (int) obj.get("xp");
+        //longs
+        participantId = (long) obj.get("participantId");
+        currentGold = (long) obj.get("currentGold");
+        dominionScore = (long) obj.get("dominionScore");
+        jungleMinionsKilled = (long) obj.get("jungleMinionsKilled");
+        level = (long) obj.get("level");
+        minionsKilled = (long) obj.get("minionsKilled");
+        teamScore = (long) obj.get("teamScore");
+        totalGold = (long) obj.get("totalGold");
+        xp = (long) obj.get("xp");
         //Objects
-        position = new Position((JSONObject) obj.get("position"));
-    }
+        if(obj.containsKey("position")){
+            position = new Position((JSONObject) obj.get("position"));
+        }
+       }
 
-    public int getParticipantId() {
+    public long getParticipantId() {
         return participantId;
     }
 
-    public void setParticipantId(int ParticipantId) {
+    public void setParticipantId(long ParticipantId) {
         this.participantId = ParticipantId;
     }
 
-    public int getCurrentGold() {
+    public long getCurrentGold() {
         return currentGold;
     }
 
-    public void setCurrentGold(int currentGold) {
+    public void setCurrentGold(long currentGold) {
         this.currentGold = currentGold;
     }
 
-    public int getDominionScore() {
+    public long getDominionScore() {
         return dominionScore;
     }
 
-    public void setDominionScore(int dominionScore) {
+    public void setDominionScore(long dominionScore) {
         this.dominionScore = dominionScore;
     }
 
-    public int getJungleMinionsKilled() {
+    public long getJungleMinionsKilled() {
         return jungleMinionsKilled;
     }
 
-    public void setJungleMinionsKilled(int jungleMinionsKilled) {
+    public void setJungleMinionsKilled(long jungleMinionsKilled) {
         this.jungleMinionsKilled = jungleMinionsKilled;
     }
 
-    public int getLevel() {
+    public long getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(long level) {
         this.level = level;
     }
 
-    public int getMinionsKilled() {
+    public long getMinionsKilled() {
         return minionsKilled;
     }
 
-    public void setMinionsKilled(int minionsKilled) {
+    public void setMinionsKilled(long minionsKilled) {
         this.minionsKilled = minionsKilled;
     }
 
@@ -99,27 +101,27 @@ public class ParticipantFrame {
         this.position = position;
     }
 
-    public int getTeamScore() {
+    public long getTeamScore() {
         return teamScore;
     }
 
-    public void setTeamScore(int teamScore) {
+    public void setTeamScore(long teamScore) {
         this.teamScore = teamScore;
     }
 
-    public int getTotalGold() {
+    public long getTotalGold() {
         return totalGold;
     }
 
-    public void setTotalGold(int totalGold) {
+    public void setTotalGold(long totalGold) {
         this.totalGold = totalGold;
     }
 
-    public int getXp() {
+    public long getXp() {
         return xp;
     }
 
-    public void setXp(int xp) {
+    public void setXp(long xp) {
         this.xp = xp;
     }
     

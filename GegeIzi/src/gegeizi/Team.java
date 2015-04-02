@@ -15,19 +15,19 @@ import org.json.simple.JSONObject;
  */
 public class Team {
     
-    private int teamId;
+    private long teamId;
     private ArrayList<BanTuple> bans;
-    private int baronKills;
-    private int dominionVictoryScore;
-    private int dragonKills;
+    private long baronKills;
+    private long dominionVictoryScore;
+    private long dragonKills;
     private boolean firstBaron;
     private boolean firstBlood;
     private boolean firstDragon;
     private boolean firstInhibitor;
     private boolean firstTower;
-    private int inhibitorKills;
-    private int towerKills;
-    private int vileMawKills;
+    private long inhibitorKills;
+    private long towerKills;
+    private long vilemawKills;
     private boolean winner;
     
     public Team(){
@@ -39,13 +39,13 @@ public class Team {
         bans = new ArrayList<>();
         
         //ints
-        teamId = (int) obj.get("teamId");
-        baronKills = (int) obj.get("baronKills");
-        dominionVictoryScore = (int) obj.get("dominionVictoryScore");       
-        dragonKills = (int) obj.get("dragonKills");
-        inhibitorKills = (int) obj.get("inhibitorKills");
-        towerKills = (int) obj.get("towerKills");
-        vileMawKills = (int) obj.get("vileMawKills");
+        teamId = (long) obj.get("teamId");
+        baronKills = (long) obj.get("baronKills");
+        dominionVictoryScore = (long) obj.get("dominionVictoryScore");       
+        dragonKills = (long) obj.get("dragonKills");
+        inhibitorKills = (long) obj.get("inhibitorKills");
+        towerKills = (long) obj.get("towerKills");
+        vilemawKills = (long) obj.get("vilemawKills");
         //booleans
         winner = (boolean) obj.get("winner");
         firstBaron = (boolean) obj.get("firstBaron");
@@ -60,11 +60,11 @@ public class Team {
         }
     }
 
-    public int getTeamId() {
+    public long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(long teamId) {
         this.teamId = teamId;
     }
 
@@ -76,27 +76,27 @@ public class Team {
         this.bans = bans;
     }
 
-    public int getBaronKills() {
+    public long getBaronKills() {
         return baronKills;
     }
 
-    public void setBaronKills(int baronKills) {
+    public void setBaronKills(long baronKills) {
         this.baronKills = baronKills;
     }
 
-    public int getDominionVictoryScore() {
+    public long getDominionVictoryScore() {
         return dominionVictoryScore;
     }
 
-    public void setDominionVictoryScore(int dominionVictoryScore) {
+    public void setDominionVictoryScore(long dominionVictoryScore) {
         this.dominionVictoryScore = dominionVictoryScore;
     }
 
-    public int getDragonKills() {
+    public long getDragonKills() {
         return dragonKills;
     }
 
-    public void setDragonKills(int dragonKills) {
+    public void setDragonKills(long dragonKills) {
         this.dragonKills = dragonKills;
     }
 
@@ -140,28 +140,28 @@ public class Team {
         this.firstTower = firstTower;
     }
 
-    public int getInhibitorKills() {
+    public long getInhibitorKills() {
         return inhibitorKills;
     }
 
-    public void setInhibitorKills(int inhibitorKills) {
+    public void setInhibitorKills(long inhibitorKills) {
         this.inhibitorKills = inhibitorKills;
     }
 
-    public int getTowerKills() {
+    public long getTowerKills() {
         return towerKills;
     }
 
-    public void setTowerKills(int towerKills) {
+    public void setTowerKills(long towerKills) {
         this.towerKills = towerKills;
     }
 
-    public int getVileMawKills() {
-        return vileMawKills;
+    public long getVilemawKills() {
+        return vilemawKills;
     }
 
-    public void setVileMawKills(int vileMawKills) {
-        this.vileMawKills = vileMawKills;
+    public void setVilemawKills(long vilemawKills) {
+        this.vilemawKills = vilemawKills;
     }
 
     public boolean isWinner() {

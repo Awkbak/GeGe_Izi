@@ -15,14 +15,14 @@ import org.json.simple.JSONObject;
  */
 public class Participant {
     
-    private int participantId;
-    private int championId;
-    private int teamId;
+    private long participantId;
+    private long championId;
+    private long teamId;
     private String highestTeir;
     private ArrayList<RuneMastery> masteries;
     private ArrayList<RuneMastery> runes;
-    private int spell1Id;
-    private int spell2Id;
+    private long spell1Id;
+    private long spell2Id;
     private ParticipantTimeline timeline;
     private Stats stats;
     
@@ -37,11 +37,11 @@ public class Participant {
         masteries = new ArrayList<>();
         runes = new ArrayList<>();
         //ints
-        participantId = (int) obj.get("participantId");
-        championId = (int) obj.get("championId");
-        teamId = (int) obj.get("teamId");
-        spell1Id = (int) obj.get("spell1Id");
-        spell2Id = (int) obj.get("spell2Id");
+        participantId = (long) obj.get("participantId");
+        championId = (long) obj.get("championId");
+        teamId = (long) obj.get("teamId");
+        spell1Id = (long) obj.get("spell1Id");
+        spell2Id = (long) obj.get("spell2Id");
         //Objects
         timeline = new ParticipantTimeline((JSONObject) obj.get("timeline"));
         //Arrays
@@ -56,27 +56,27 @@ public class Participant {
         }
     }
     
-    public int getParticipantId() {
+    public long getParticipantId() {
         return participantId;
     }
 
-    public void setParticipantId(int participantId) {
+    public void setParticipantId(long participantId) {
         this.participantId = participantId;
     }
 
-    public int getChampionId() {
+    public long getChampionId() {
         return championId;
     }
 
-    public void setChampionId(int championId) {
+    public void setChampionId(long championId) {
         this.championId = championId;
     }
 
-    public int getTeamId() {
+    public long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(long teamId) {
         this.teamId = teamId;
     }
 
@@ -104,19 +104,19 @@ public class Participant {
         this.runes = runes;
     }
 
-    public int getSpell1Id() {
+    public long getSpell1Id() {
         return spell1Id;
     }
 
-    public void setSpell1Id(int spell1Id) {
+    public void setSpell1Id(long spell1Id) {
         this.spell1Id = spell1Id;
     }
 
-    public int getSpell2Id() {
+    public long getSpell2Id() {
         return spell2Id;
     }
 
-    public void setSpell2Id(int spell2Id) {
+    public void setSpell2Id(long spell2Id) {
         this.spell2Id = spell2Id;
     }
     

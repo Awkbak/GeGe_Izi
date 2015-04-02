@@ -32,13 +32,27 @@ public class ParticipantTimeline {
         lane = (String) obj.get("lane");
         role = (String) obj.get("role");
         //Objects
-        creepsPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("creepsPerMinDeltas"));
-        csDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("csDiffPerMinDeltas"));
-        damageTakenDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("damageTakenDiffPerMinDeltas"));
-        damageTakenPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("damageTakenPerMinDeltas"));
-        goldPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("goldPerMinDeltas"));
-        xpDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("xpDiffPerMinDeltas"));
-        xpPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("xpPerMinDeltas"));
+        if(obj.containsKey("creepsPerMinDeltas")){
+            creepsPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("creepsPerMinDeltas"));
+        }
+        if(obj.containsKey("csDiffPerMinDeltas")){
+            csDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("csDiffPerMinDeltas"));
+        }
+        if(obj.containsKey("damageTakenDiffPerMinDeltas")){
+            damageTakenDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("damageTakenDiffPerMinDeltas"));
+        }
+        if(obj.containsKey("damageTakenPerMinDeltas")){
+            damageTakenPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("damageTakenPerMinDeltas"));
+        }
+        if(obj.containsKey("goldPerMinDeltas")){
+            goldPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("goldPerMinDeltas"));
+        }
+        if(obj.containsKey("xpDiffPerMinDeltas")){
+            xpDiffPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("xpDiffPerMinDeltas"));
+        }
+        if(obj.containsKey("xpPerMinDeltas")){
+            xpPerMinDeltas = new ParticipantTimelineTuple((JSONObject) obj.get("xpPerMinDeltas"));
+        }
     }
 
     public String getLane() {

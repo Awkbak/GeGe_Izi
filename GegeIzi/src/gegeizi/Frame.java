@@ -17,7 +17,7 @@ public class Frame {
     
     private ArrayList<Event> events;
     private ArrayList<ParticipantFrame> participantFrames;
-    private int timeStamp;
+    private long timeStamp;
 
     public Frame(){
         events = new ArrayList<>();
@@ -30,12 +30,18 @@ public class Frame {
         participantFrames = new ArrayList<>();
         
         //ints
-        timeStamp = (int) obj.get("timestamp");
+        timeStamp = (long) obj.get("timestamp");
         //Arrays
-        JSONArray arr = (JSONArray) obj.get("frames");
-        for (Object arr1 : arr) {
-            participantFrames.add(new ParticipantFrame((JSONObject) arr1));
+        
+        JSONArray arr;// = (JSONArray) obj.get("participantFrames");
+        JSONObject obj2 = (JSONObject) obj.get("participantFrames");
+        //System.out.println("G: " + (arr == null));
+        for(int e = 1; e <= 10; e ++){
+            participantFrames.add(new ParticipantFrame((JSONObject) obj2.get(e + "")));
         }
+        //for (Object arr1 : arr) {
+        //    participantFrames.add(new ParticipantFrame((JSONObject) arr1));
+        //}
         if(obj.containsKey("events"))
         {
             arr = (JSONArray) obj.get("events");
@@ -61,11 +67,11 @@ public class Frame {
         this.participantFrames = participantFrames;
     }
 
-    public int getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(int timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
     

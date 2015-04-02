@@ -14,9 +14,9 @@ import org.json.simple.JSONObject;
  * @author user
  */
 public class Match {
-    private int mapId;
+    private long mapId;
     private long matchCreation;
-    private int matchDuration;
+    private long matchDuration;
     private long matchId;
     private String matchMode;
     private String matchType;
@@ -28,19 +28,20 @@ public class Match {
     private String season;
     private ArrayList<Team> teams;
     private MatchTimeline timeline;
-    
-    public void Match(){
+   
+    public Match(){
         //Initialize ArrayLists
         teams = new ArrayList<>();
+        participants = new ArrayList<>();
     }
     
-    public void Match(JSONObject obj){
+    public Match(JSONObject obj){
         //Initialize ArrayLists
         teams = new ArrayList<>();
-        //Int
-        mapId = (int) obj.get("mapId");
-        matchDuration = (int) obj.get("matchDuration");
-        //Long
+        participants = new ArrayList<>();
+        //longs
+        matchDuration = (long) obj.get("matchDuration");
+        mapId = (long) obj.get("mapId");
         matchCreation = (long) obj.get("matchCreation");
         matchId = (long) obj.get("matchId");
         //String
@@ -65,11 +66,11 @@ public class Match {
         }
     }
 
-    public int getMapId() {
+    public long getMapId() {
         return mapId;
     }
 
-    public void setMapId(int mapId) {
+    public void setMapId(long mapId) {
         this.mapId = mapId;
     }
 
@@ -81,11 +82,11 @@ public class Match {
         this.matchCreation = matchCreation;
     }
 
-    public int getMatchDuration() {
+    public long getMatchDuration() {
         return matchDuration;
     }
 
-    public void setMatchDuration(int matchDuration) {
+    public void setMatchDuration(long matchDuration) {
         this.matchDuration = matchDuration;
     }
 

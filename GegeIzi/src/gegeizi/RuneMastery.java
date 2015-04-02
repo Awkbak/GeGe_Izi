@@ -12,8 +12,8 @@ import org.json.simple.JSONObject;
  * @author user
  */
 public class RuneMastery {
-    private int id;
-    private int rank;
+    private long id;
+    private long rank;
     
     public RuneMastery(){
         
@@ -21,29 +21,29 @@ public class RuneMastery {
     
     public RuneMastery(JSONObject obj, String type){
         //ints
-        rank = (int) obj.get("rank");
+        rank = (long) obj.get("rank");
         //Make surte to find the right variable (class controls Runes and Masteries)
         if(type.equals("Rune")){
-            id = (int) obj.get("runeId");
+            id = (long) obj.get("runeId");
         }
         else{
-            id = (int) obj.get("masteryId");
+            id = (long) obj.get("masteryId");
         }
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getRank() {
+    public long getRank() {
         return rank;
     }
 
-    public void setRank(int rank) {
+    public void setRank(long rank) {
         this.rank = rank;
     }
     

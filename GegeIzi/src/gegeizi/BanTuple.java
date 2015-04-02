@@ -12,8 +12,8 @@ import org.json.simple.JSONObject;
  * @author user
  */
 public class BanTuple {
-    private int championId;
-    private int pickTurn;
+    private long championId;
+    private long pickTurn;
     
     public BanTuple(){
         
@@ -21,23 +21,23 @@ public class BanTuple {
     
     public BanTuple(JSONObject obj){
         //ints
-        championId = (int) obj.get("championId");
-        pickTurn = (int) obj.get("pickTurn");
+        championId = (long) obj.get("championId");
+        pickTurn = (long) obj.get("pickTurn");
     }
 
-    public int getChampionId() {
+    public long getChampionId() {
         return championId;
     }
 
-    public void setChampionId(int championId) {
+    public void setChampionId(long championId) {
         this.championId = championId;
     }
 
-    public int getPickTurn() {
+    public long getPickTurn() {
         return pickTurn;
     }
 
-    public void setPickTurn(int pickTurn) {
+    public void setPickTurn(long pickTurn) {
         this.pickTurn = pickTurn;
     }
     
