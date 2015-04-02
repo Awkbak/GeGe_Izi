@@ -1,6 +1,6 @@
-/**©Murilo Costa
- * GeGe Izi
- * Goal: To create a convenient tool for streamers to show and analyze their stats.
+/**©Awkbak BR, BobJrSenior
+ * Sounds of URF
+ * Goal: To create an App that generates a sound sequence based off the outcome of game IDs
  * Using Riot's API to create this app.
  * Start Date: 3/27/2015
  */
