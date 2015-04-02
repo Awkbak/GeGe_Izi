@@ -47,7 +47,7 @@ public class Main extends Application {
         Button btn = new Button("",new ImageView(img));
         btn.setOnAction((ActionEvent event) -> {
             mainKeyboard.PlaySound(1);
-            CallAPI test = new CallAPI("https://na.api.pvp.net/api/lol/na/v2.2/match/1778704162?includeTimeline=true&api_key=04e61b3a-f876-4fc6-bc1e-1e5f3c6fc2af");
+            CallAPI test = new CallAPI("https://na.api.pvp.net/api/lol/na/v2.2/match/1778704162?includeTimeline=true&api_key=" + ApiKey.API_KEY);
             threadpool.execute(test);
         });
         
