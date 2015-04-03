@@ -55,7 +55,7 @@ public class Main extends Application {
     ComboBox pickMatches;
     Keyboard mainKeyboard;
     
-    ExecutorService threadpool; //Keeps too many threads from running
+    //ExecutorService threadpool; //Keeps too many threads from running
     ArrayList<Match> matches; //A list of currently loaded matches
     ObservableList<Long> matchIds; //A list of currently loaded match ids
     boolean callingAPI; //Is the api currently being used?
@@ -81,7 +81,7 @@ public class Main extends Application {
         
         
         
-        threadpool = Executors.newFixedThreadPool(4);
+        //threadpool = Executors.newFixedThreadPool(4);
         matches = new ArrayList<>();
         matchIds = FXCollections.observableArrayList();
         callingAPI = false;
@@ -115,7 +115,7 @@ public class Main extends Application {
 
             long time = 1428009000; //time to retrieve match ids from
             getMatchIds(time);
-            pickMatches.getItems().setAll(matchIds);
+            
         });
         
         Pane root = new Pane();
@@ -146,7 +146,8 @@ public class Main extends Application {
     //Get a match by its id
     public void getMatch(long matchId){
         GetMatchInfo call = new GetMatchInfo("https://na.api.pvp.net/api/lol/na/v2.2/match/" + matchId + "?includeTimeline=true&api_key=" + ApiKey.API_KEY);
-        threadpool.execute(call);
+        //threadpool.execute(call);
+        call.run();
     }
     
     //Get a match by its index in matchIds
@@ -156,7 +157,11 @@ public class Main extends Application {
     
     //Note: the time is in epoch seconds (unix time in seconds) and must be in a multiple of 5 minutes
     public void getMatchIds(long time){
-        threadpool.execute(new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY));
+        if(!callingAPI){
+            GetIds call = new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY);
+            call.run();
+            //threadpool.execute(new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY));
+        }
         
     }
     
