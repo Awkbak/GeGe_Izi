@@ -53,7 +53,6 @@ Completable Future Sample
  */
 public class Main extends Application {
     ComboBox pickMatches;
-    ObservableList<String> allMatches;
     Keyboard mainKeyboard;
     
     ExecutorService threadpool; //Keeps too many threads from running
@@ -76,31 +75,18 @@ public class Main extends Application {
         ImageView m = new ImageView(j);
         m.relocate(100, 100);
         */
-        allMatches = FXCollections.observableArrayList(
-        "1782097030",
-        "1782101852",
-        "1782079177",
-        "1782096700",
-        "1782096937",
-        "1782102004",
-        "1782078542",
-        "1782079265",
-        "1782102202",
-        "1782079331",
-        "1782079433",
-        "1782079604",
-        "1782087872",
-        "1782096885",
-        "1782097052",
-        "1782097109",
-        "1782102324",
-        "1782079069",
-        "1782078963",
-        "1782097192",
-        "1782097411"
-        );
+
         
-        pickMatches = new ComboBox(allMatches);
+        
+        
+        
+        
+        threadpool = Executors.newFixedThreadPool(4);
+        matches = new ArrayList<>();
+        matchIds = FXCollections.observableArrayList();
+        callingAPI = false;
+        
+        pickMatches = new ComboBox(matchIds);
         pickMatches.relocate(550, 250);
         pickMatches.getSelectionModel().select(0);
         
@@ -117,13 +103,6 @@ public class Main extends Application {
         elTempo.setFont(new Font("Cambria",14));
         elTempo.relocate(500,205);
         
-        
-        
-        threadpool = Executors.newFixedThreadPool(4);
-        matches = new ArrayList<>();
-        matchIds = FXCollections.observableArrayList();
-        callingAPI = false;
-        
         initKeyboard();
 
         Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
@@ -136,6 +115,7 @@ public class Main extends Application {
 
             long time = 1428009000; //time to retrieve match ids from
             getMatchIds(time);
+            pickMatches.getItems().setAll(matchIds);
         });
         
         Pane root = new Pane();
