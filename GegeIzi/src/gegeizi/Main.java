@@ -27,7 +27,21 @@ import javafx.stage.Stage;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- *
+Completable Future Sample
+* CompletableFuture<Summoner> F = CompletableFuture.supplyAsync(() ->{
+            current = getInfo(i);
+            return null;
+        });
+        F.whenComplete((ok,ex)->{
+            Platform.runLater(()->{
+                finished();
+                update();
+            });
+        });
+ */
+
+/**
+ * 
  * @author Awkbak
  */
 public class Main extends Application {
@@ -46,6 +60,9 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        Image j = new Image(getClass().getResourceAsStream("UrfDisk.png"));
+        ImageView m = new ImageView(j);
+        m.relocate(100, 100);
         threadpool = Executors.newFixedThreadPool(4);
         
         initKeyboard();
@@ -61,7 +78,7 @@ public class Main extends Application {
         });
         
         Pane root = new Pane();
-        root.getChildren().addAll(mainKeyboard,btn);
+        root.getChildren().addAll(mainKeyboard,btn,m);
         
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
