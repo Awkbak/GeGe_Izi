@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -38,6 +39,15 @@ public class Main extends Application {
     ArrayList<Long> matchIds; //A list of currently loaded match ids
     boolean callingAPI; //Is the api currently being used?
     
+    public void initKeyboard(){
+        String[] kek = new String[10];
+        for(int i =0;i<10;i++){
+            String s = "Key" + i + ".mp3";
+            kek[i] = s;
+        }
+        mainKeyboard = new Keyboard(kek);
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         threadpool = Executors.newFixedThreadPool(4);
@@ -45,15 +55,15 @@ public class Main extends Application {
         matchIds = new ArrayList<>();
         callingAPI = false;
         
-        String[] kek = new String[10];
-        for(int i =0;i<10;i++){
-            kek[i] = "test.mp3";
-        }
-        mainKeyboard = new Keyboard(kek);
+        initKeyboard();
+
         Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
         Button btn = new Button("",new ImageView(img));
         btn.setOnAction((ActionEvent event) -> {
-            mainKeyboard.PlaySound(1);
+            Random s = new Random();
+            int n = s.nextInt(10);
+            mainKeyboard.PlaySound(n);
+
             long time = 1428009000; //time to retrieve match ids from
             getMatchIds(time);
         });
