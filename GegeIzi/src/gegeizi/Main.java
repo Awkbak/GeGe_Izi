@@ -58,7 +58,7 @@ public class Main extends Application {
     
     ExecutorService threadpool; //Keeps too many threads from running
     ArrayList<Match> matches; //A list of currently loaded matches
-    ArrayList<Long> matchIds; //A list of currently loaded match ids
+    ObservableList<Long> matchIds; //A list of currently loaded match ids
     boolean callingAPI; //Is the api currently being used?
     
     public void initKeyboard(){
@@ -121,7 +121,7 @@ public class Main extends Application {
         
         threadpool = Executors.newFixedThreadPool(4);
         matches = new ArrayList<>();
-        matchIds = new ArrayList<>();
+        matchIds = FXCollections.observableArrayList();
         callingAPI = false;
         
         initKeyboard();
@@ -156,6 +156,13 @@ public class Main extends Application {
         launch(args);
     }
     
+    //Get a match using the current time (rounded to 5 minutes)
+    public void getMatch(){
+        long epoch = 1427986200;
+        
+        //long epoch = System.currentTimeMillis() / 1000;
+    }
+    
     //Get a match by its id
     public void getMatch(long matchId){
         GetMatchInfo call = new GetMatchInfo("https://na.api.pvp.net/api/lol/na/v2.2/match/" + matchId + "?includeTimeline=true&api_key=" + ApiKey.API_KEY);
@@ -169,8 +176,8 @@ public class Main extends Application {
     
     //Note: the time is in epoch seconds (unix time in seconds) and must be in a multiple of 5 minutes
     public void getMatchIds(long time){
-        GetIds call = new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY);
-        threadpool.execute(call);
+        threadpool.execute(new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY));
+        
     }
     
     //Called whenever a match is constructed from the api
@@ -178,11 +185,14 @@ public class Main extends Application {
         System.out.println("Parsed Match");
         matches.add(match);
         callingAPI = false;
+        //FXCollections.observableArrayList(matches)
     }
     //Called whenever a list of match ids is retrieved from the server
     public void recievedMatchIds(ArrayList<Long> ids){
         System.out.println("Got Match Ids");
-        matchIds = ids;
+        if(ids != null){
+            matchIds.addAll(ids);
+        }
         callingAPI = false;
     }
     
@@ -207,6 +217,7 @@ public class Main extends Application {
         public void run() {
             callingAPI = true;
             HttpsURLConnection con = null;
+            
             try {
                 con = (HttpsURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
@@ -230,8 +241,9 @@ public class Main extends Application {
                 if(con != null){
                     con.disconnect();
                 }
+                
             }
-        }  
+        }
     }
     //Used to get a set of match ids from the riot api
     class GetIds implements Runnable{
@@ -252,6 +264,7 @@ public class Main extends Application {
         public void run() {
             callingAPI = true;
             HttpsURLConnection con = null;
+            ArrayList<Long> ids = null;
             try {
                 con = (HttpsURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
@@ -264,7 +277,8 @@ public class Main extends Application {
                         while((line = reader.readLine()) != null){
                                 sb.append(line);
                         }
-                        recievedMatchIds(JSONUtils.MatchParser.parseIds(sb.toString()));                        
+                        ids = (JSONUtils.MatchParser.parseIds(sb.toString()));
+                        System.out.println("after recieve");
                 }
             } catch (IOException e) {
                     // TODO Auto-generated catch block
@@ -276,6 +290,7 @@ public class Main extends Application {
                     con.disconnect();
                 }
             }
+            recievedMatchIds(ids);
         }
         
     }
