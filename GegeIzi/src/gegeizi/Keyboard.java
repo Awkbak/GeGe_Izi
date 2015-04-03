@@ -6,6 +6,7 @@
 package gegeizi;
 
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -19,6 +20,7 @@ public class Keyboard extends Group{
         for(int i = 0;i<10;i++){
             board[i] = new Key();
             board[i].relocate(150+50*i,400);
+            board[i].setOnMouseClicked(this::testKey);
             this.getChildren().add(board[i]);
         }
     }
@@ -28,11 +30,16 @@ public class Keyboard extends Group{
         for(int i = 0;i<10;i++){
             board[i] = new Key(kek[i]);
             board[i].relocate(150+50*i,400);
+            board[i].setOnMouseClicked(this::testKey);
             this.getChildren().add(board[i]);
         }
     }
     
     public void PlaySound(int i){
         board[i].PlaySound();
+    }
+    
+    public void testKey(MouseEvent e){
+        ((Key)e.getSource()).PlaySound();
     }
 }

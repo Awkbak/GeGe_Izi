@@ -18,12 +18,18 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javax.net.ssl.HttpsURLConnection;
 
@@ -46,6 +52,8 @@ Completable Future Sample
  * @author Awkbak
  */
 public class Main extends Application {
+    ComboBox pickMatches;
+    ObservableList<String> allMatches;
     Keyboard mainKeyboard;
     
     ExecutorService threadpool; //Keeps too many threads from running
@@ -64,9 +72,53 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Image j = new Image(getClass().getResourceAsStream("UrfDisk.png"));
+        /*Image j = new Image(getClass().getResourceAsStream("UrfDisk.png"));
         ImageView m = new ImageView(j);
         m.relocate(100, 100);
+        */
+        allMatches = FXCollections.observableArrayList(
+        "1782097030",
+        "1782101852",
+        "1782079177",
+        "1782096700",
+        "1782096937",
+        "1782102004",
+        "1782078542",
+        "1782079265",
+        "1782102202",
+        "1782079331",
+        "1782079433",
+        "1782079604",
+        "1782087872",
+        "1782096885",
+        "1782097052",
+        "1782097109",
+        "1782102324",
+        "1782079069",
+        "1782078963",
+        "1782097192",
+        "1782097411"
+        );
+        
+        pickMatches = new ComboBox(allMatches);
+        pickMatches.relocate(550, 250);
+        pickMatches.getSelectionModel().select(0);
+        
+        Label elList = new Label("Match ID: ");
+        elList.setFont(new Font("Cambria",14));
+        elList.relocate(490, 255);
+        
+        TextField inTempo = new TextField();
+        inTempo.setPrefSize(75, 30);
+        inTempo.relocate(550,200); 
+        inTempo.setText("100");
+        
+        Label elTempo = new Label("Tempo: ");
+        elTempo.setFont(new Font("Cambria",14));
+        elTempo.relocate(500,205);
+        
+        
+        
         threadpool = Executors.newFixedThreadPool(4);
         matches = new ArrayList<>();
         matchIds = new ArrayList<>();
@@ -76,6 +128,7 @@ public class Main extends Application {
 
         Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
         Button btn = new Button("",new ImageView(img));
+        btn.relocate(550, 290);
         btn.setOnAction((ActionEvent event) -> {
             Random s = new Random();
             int n = s.nextInt(10);
@@ -86,7 +139,7 @@ public class Main extends Application {
         });
         
         Pane root = new Pane();
-        root.getChildren().addAll(mainKeyboard,btn,m);
+        root.getChildren().addAll(mainKeyboard,pickMatches,btn,inTempo,elTempo,elList);
         
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
