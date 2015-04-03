@@ -185,4 +185,13 @@ public class Match {
     public void addTeam(Team team){
         teams.add(team);
     }
+    
+    public ArrayList<Event> getEventList(){
+        ArrayList<Event> events = new ArrayList<>();
+        ArrayList<Frame> frames = timeline.getFrames();
+        for(Frame frame : frames){
+            events.addAll(frame.getEvents());
+        }
+        return events;
+    }
 }

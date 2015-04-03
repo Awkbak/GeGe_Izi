@@ -81,8 +81,8 @@ public class Main extends Application {
             int n = s.nextInt(10);
             mainKeyboard.PlaySound(n);
 
-            long time = 1428009000; //time to retrieve match ids from
-            getMatchIds(time);
+            //long time = 1428009000; //time to retrieve match ids from
+            //getMatchIds(time);
         });
         
         Pane root = new Pane();
