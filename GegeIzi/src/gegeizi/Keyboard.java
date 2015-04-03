@@ -18,7 +18,7 @@ public class Keyboard extends Group{
         board = new Key[10];
         for(int i = 0;i<10;i++){
             board[i] = new Key();
-            board[i].relocate(100+50*i,300);
+            board[i].relocate(150+50*i,330);
             this.getChildren().add(board[i]);
         }
     }
@@ -27,7 +27,7 @@ public class Keyboard extends Group{
         board = new Key[10];
         for(int i = 0;i<10;i++){
             board[i] = new Key(kek[i]);
-            board[i].relocate(100+50*i,300);
+            board[i].relocate(150+50*i,330);
             this.getChildren().add(board[i]);
         }
     }

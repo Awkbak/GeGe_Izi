@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -34,19 +35,27 @@ public class Main extends Application {
     
     ExecutorService threadpool;
     
+    public void initKeyboard(){
+        String[] kek = new String[10];
+        for(int i =0;i<10;i++){
+            String s = "Key" + i + ".mp3";
+            kek[i] = s;
+        }
+        mainKeyboard = new Keyboard(kek);
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         threadpool = Executors.newFixedThreadPool(4);
         
-        String[] kek = new String[10];
-        for(int i =0;i<10;i++){
-            kek[i] = "test.mp3";
-        }
-        mainKeyboard = new Keyboard(kek);
+        initKeyboard();
+
         Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
         Button btn = new Button("",new ImageView(img));
         btn.setOnAction((ActionEvent event) -> {
-            mainKeyboard.PlaySound(1);
+            Random s = new Random();
+            int n = s.nextInt(10);
+            mainKeyboard.PlaySound(n);
             CallAPI test = new CallAPI("https://na.api.pvp.net/api/lol/na/v2.2/match/1778704162?includeTimeline=true&api_key=" + ApiKey.API_KEY);
             threadpool.execute(test);
         });
