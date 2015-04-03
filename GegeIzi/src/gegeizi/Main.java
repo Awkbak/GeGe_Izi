@@ -13,11 +13,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,6 +56,7 @@ Completable Future Sample
 public class Main extends Application {
     ComboBox pickMatches;
     Keyboard mainKeyboard;
+    ImageView spinning;
     
     //ExecutorService threadpool; //Keeps too many threads from running
     ArrayList<Match> matches; //A list of currently loaded matches
@@ -69,13 +72,33 @@ public class Main extends Application {
         mainKeyboard = new Keyboard(kek);
     }
     
+    public void spinDisk(){
+        for(int i = 0;i<3600;i++){
+            spinning.setRotate(i);
+            try {
+                wait(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         /*Image j = new Image(getClass().getResourceAsStream("UrfDisk.png"));
-        ImageView m = new ImageView(j);
-        m.relocate(100, 100);
+        spinning = new ImageView(j);
+        spinning.relocate(100, 100);
+        
+        CompletableFuture<Integer> F = CompletableFuture.supplyAsync(() ->{
+            spinDisk();
+            return null;
+        });
+        F.whenComplete((ok,ex)->{
+            Platform.runLater(()->{
+                
+            });
+        });
         */
-
         
         
         
@@ -119,7 +142,7 @@ public class Main extends Application {
         });
         
         Pane root = new Pane();
-        root.getChildren().addAll(mainKeyboard,pickMatches,btn,inTempo,elTempo,elList);
+        root.getChildren().addAll(mainKeyboard,pickMatches,spinning,btn,inTempo,elTempo,elList);
         
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
