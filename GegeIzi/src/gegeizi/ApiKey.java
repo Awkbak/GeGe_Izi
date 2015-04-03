@@ -10,5 +10,5 @@ package gegeizi;
  * @author user
  */
 public class ApiKey {
-    public static final String API_KEY = "04e61b3a-f876-4fc6-bc1e-1e5f3c6fc2af";
+    public static final String API_KEY = "Put API Key Here";
 }
