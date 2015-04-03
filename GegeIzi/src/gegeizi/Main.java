@@ -1,4 +1,4 @@
-/**©Awkbak BR, BobJrSenior
+/**©Awkbak BR, Bobjrsenior
  * Sounds of URF
  * Goal: To create an App that generates a sound sequence based off the outcome of game IDs
  * Using Riot's API to create this app.
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -32,11 +33,17 @@ import javax.net.ssl.HttpsURLConnection;
 public class Main extends Application {
     Keyboard mainKeyboard;
     
-    ExecutorService threadpool;
+    ExecutorService threadpool; //Keeps too many threads from running
+    ArrayList<Match> matches; //A list of currently loaded matches
+    ArrayList<Long> matchIds; //A list of currently loaded match ids
+    boolean callingAPI; //Is the api currently being used?
     
     @Override
     public void start(Stage primaryStage) {
         threadpool = Executors.newFixedThreadPool(4);
+        matches = new ArrayList<>();
+        matchIds = new ArrayList<>();
+        callingAPI = false;
         
         String[] kek = new String[10];
         for(int i =0;i<10;i++){
@@ -47,8 +54,8 @@ public class Main extends Application {
         Button btn = new Button("",new ImageView(img));
         btn.setOnAction((ActionEvent event) -> {
             mainKeyboard.PlaySound(1);
-            CallAPI test = new CallAPI("https://na.api.pvp.net/api/lol/na/v2.2/match/1778704162?includeTimeline=true&api_key=" + ApiKey.API_KEY);
-            threadpool.execute(test);
+            long time = 1428009000; //time to retrieve match ids from
+            getMatchIds(time);
         });
         
         Pane root = new Pane();
@@ -69,18 +76,44 @@ public class Main extends Application {
         launch(args);
     }
     
+    //Get a match by its id
+    public void getMatch(long matchId){
+        GetMatchInfo call = new GetMatchInfo("https://na.api.pvp.net/api/lol/na/v2.2/match/" + matchId + "?includeTimeline=true&api_key=" + ApiKey.API_KEY);
+        threadpool.execute(call);
+    }
+    
+    //Get a match by its index in matchIds
+    public void getMatch(int index){
+        getMatch(matchIds.get(index));
+    }
+    
+    //Note: the time is in epoch seconds (unix time in seconds) and must be in a multiple of 5 minutes
+    public void getMatchIds(long time){
+        GetIds call = new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY);
+        threadpool.execute(call);
+    }
+    
+    //Called whenever a match is constructed from the api
     public void recievedMatch(Match match){
-        System.out.println("yay");
+        System.out.println("Parsed Match");
+        matches.add(match);
+        callingAPI = false;
+    }
+    //Called whenever a list of match ids is retrieved from the server
+    public void recievedMatchIds(ArrayList<Long> ids){
+        System.out.println("Got Match Ids");
+        matchIds = ids;
+        callingAPI = false;
     }
     
     
-    //Used to access the riot api
-    class CallAPI implements Runnable{
+    //Used get a matches information from the riot api
+    class GetMatchInfo implements Runnable{
         //url to retrieve from
         //public RequestParams params;
         public URL url;
         
-        public CallAPI(String url){
+        public GetMatchInfo(String url){
             try {
                 //this.params = params;
                 this.url = new URL(url);
@@ -92,10 +125,10 @@ public class Main extends Application {
         //
         @Override
         public void run() {
-            
+            callingAPI = true;
+            HttpsURLConnection con = null;
             try {
-                url = url;
-                HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+                con = (HttpsURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.connect();
                 int statusCode = con.getResponseCode();
@@ -107,16 +140,63 @@ public class Main extends Application {
                                 sb.append(line);
                         }
                         recievedMatch(JSONUtils.MatchParser.parseMatch(sb.toString()));
-                        
                 }
             } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                    callingAPI = false;
             }
             finally{
+                if(con != null){
+                    con.disconnect();
+                }
+            }
+        }  
+    }
+    //Used to get a set of match ids from the riot api
+    class GetIds implements Runnable{
+
+        URL url;
+        
+        public GetIds(String url){
+            try {
+                this.url = new URL(url);
+                //this.ids = ids;
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
+        
+        @Override
+        public void run() {
+            callingAPI = true;
+            HttpsURLConnection con = null;
+            try {
+                con = (HttpsURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.connect();
+                int statusCode = con.getResponseCode();
+                if(statusCode == HttpsURLConnection.HTTP_OK){
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                        StringBuilder sb = new StringBuilder();
+                        String line = null;
+                        while((line = reader.readLine()) != null){
+                                sb.append(line);
+                        }
+                        recievedMatchIds(JSONUtils.MatchParser.parseIds(sb.toString()));                        
+                }
+            } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    callingAPI = false;
+            }
+            finally{
+                if(con != null){
+                    con.disconnect();
+                }
+            }
+        }
         
     }
     
