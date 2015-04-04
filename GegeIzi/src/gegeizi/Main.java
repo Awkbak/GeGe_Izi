@@ -85,11 +85,11 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        /*Image j = new Image(getClass().getResourceAsStream("UrfDisk.png"));
+        Image j = new Image(getClass().getResourceAsStream("UrfDisk.png"));
         spinning = new ImageView(j);
         spinning.relocate(100, 100);
         
-        CompletableFuture<Integer> F = CompletableFuture.supplyAsync(() ->{
+        /*CompletableFuture<Integer> F = CompletableFuture.supplyAsync(() ->{
             spinDisk();
             return null;
         });
@@ -97,8 +97,8 @@ public class Main extends Application {
             Platform.runLater(()->{
                 
             });
-        });
-        */
+        });*/
+        
         
         
         
@@ -132,15 +132,18 @@ public class Main extends Application {
         Button btn = new Button("",new ImageView(img));
         btn.relocate(550, 290);
         btn.setOnAction((ActionEvent event) -> {
-            Random s = new Random();
-            int n = s.nextInt(10);
-            mainKeyboard.PlaySound(n);
+            //Random s = new Random();
+            //int n = s.nextInt(10);
+            //mainKeyboard.PlaySound(n);
 
-            long time = 1428009000; //time to retrieve match ids from
-            getMatchIds(time);
             
+            //Make sure you have a match loaded before using
+            //PlaySong song = new PlaySong();
+            //Thread th1 = new Thread(song);
+            //th1.start();
         });
         
+                
         Pane root = new Pane();
         root.getChildren().addAll(mainKeyboard,pickMatches,spinning,btn,inTempo,elTempo,elList);
         
@@ -158,6 +161,67 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+     
+    class PlaySongConcept implements Runnable{
+        
+        int sound = 0;
+        
+        @Override
+        public void run() {
+            //Note the time is multiplied by tempo for testing
+            //so everything isn't played at once/easier to make example times
+            int tempo = 10; 
+            ArrayList<Integer> testEvents = new ArrayList<>();
+            testEvents.add(500);
+            testEvents.add(750);
+            testEvents.add(1000);
+            testEvents.add(1100);
+            testEvents.add(1200);
+            testEvents.add(1500);
+            testEvents.add(1550);
+            long time = System.currentTimeMillis();
+            //Go through every event
+            for(Integer e : testEvents){ 
+                //Wait until the sound is ready to play
+                while(System.currentTimeMillis() - time < e * tempo){
+
+                }
+                //Change sonds every time (Will be getting sound based on event type or participantId)
+                sound ++;
+                //Sounds have to be played on the JavaFX thread. THis does that
+                Platform.runLater(() -> {
+                    mainKeyboard.PlaySound(sound);
+                });
+             }
+        }
+    }
+    
+    class PlaySong implements Runnable{
+
+        int sound = 1;
+
+        @Override
+        public void run() {
+            int tempo = 100;
+            //Get all events
+            ArrayList<Event> events = matches.get(0).getEventList();
+            long time = System.currentTimeMillis();
+            //Go through every event
+            for(Event e : events){
+                //Wait until the sound is ready to play
+                while(System.currentTimeMillis() - time < e.getTimeStamp() / tempo){
+
+                }
+                //Get the sond based on participantId
+                sound = (int) e.getParticipantId();
+                //Play sound on JavaFX thread (Can only play a sound on that thread)
+                Platform.runLater(() -> {
+                    mainKeyboard.PlaySound(sound);
+                });
+            }
+        }
+        
+    }
     
     //Get a match using the current time (rounded to 5 minutes)
     public void getMatch(){
@@ -170,7 +234,8 @@ public class Main extends Application {
     public void getMatch(long matchId){
         GetMatchInfo call = new GetMatchInfo("https://na.api.pvp.net/api/lol/na/v2.2/match/" + matchId + "?includeTimeline=true&api_key=" + ApiKey.API_KEY);
         //threadpool.execute(call);
-        call.run();
+        Thread th = new Thread(call);
+        th.start();
     }
     
     //Get a match by its index in matchIds
@@ -182,7 +247,8 @@ public class Main extends Application {
     public void getMatchIds(long time){
         if(!callingAPI){
             GetIds call = new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY);
-            call.run();
+            Thread th = new Thread(call);
+            th.start();
             //threadpool.execute(new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY));
         }
         
