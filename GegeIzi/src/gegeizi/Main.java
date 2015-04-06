@@ -98,12 +98,6 @@ public class Main extends Application {
                 
             });
         });*/
-        
-        
-        
-        
-        
-        
         //threadpool = Executors.newFixedThreadPool(4);
         matches = new ArrayList<>();
         matchIds = FXCollections.observableArrayList();
