@@ -16,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -68,12 +70,18 @@ public class Main extends Application {
     boolean callingAPI; //Is the api currently being used?
     
     public void initBoxes(){
+        eventTypes = new boolean[numevents];
         String[] eve = {"Champion Kill","Building Kill","Skill level-up","Item Purchased","Ward Placed","Item Destroyed","Elite Monster Kill"};
         
         for(int i=0;i<numevents;i++){
             CheckBox k = new CheckBox(eve[i]);
             k.relocate(350,180+30*i);
             allBoxes.getChildren().add(k);
+            k.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+                int x = allBoxes.getChildren().indexOf(k);
+                eventTypes[x] = newValue;
+            });
+            eventTypes[i] = false;
         }
     }
     
