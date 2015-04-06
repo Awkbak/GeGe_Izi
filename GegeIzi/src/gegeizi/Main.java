@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -21,6 +22,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -97,14 +99,14 @@ public class Main extends Application {
     }
     
     public void spinDisk(){
-        
-        for(int i = 0;i<3600;i++){
-            spinning.setRotate(i);
-            try {
-                wait(10);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        while(true){
+            spinning.setRotate(spinning.getRotate() + 1);
+            //try {
+            //    wait(10);
+            //} catch (InterruptedException ex) {
+            //    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            //}
+            
         }
     }
     
@@ -116,7 +118,7 @@ public class Main extends Application {
         
         
         
-        /*CompletableFuture<Integer> F = CompletableFuture.supplyAsync(() ->{
+        CompletableFuture<Integer> F = CompletableFuture.supplyAsync(() ->{
             spinDisk();
             return null;
         });
@@ -124,7 +126,7 @@ public class Main extends Application {
             Platform.runLater(()->{
                 
             });
-        });*/
+        });
         //threadpool = Executors.newFixedThreadPool(4);
         
         initBoxes();
@@ -152,7 +154,7 @@ public class Main extends Application {
         
         initKeyboard();
 
-        matches = new ArrayList<>();
+        //matches = new ArrayList<>();
         getMatchIds();
         
         Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
@@ -162,12 +164,10 @@ public class Main extends Application {
             //Random s = new Random();
             //int n = s.nextInt(10);
             //mainKeyboard.PlaySound(n);
-
+            
             //Make sure you have a match loaded before using
-            if(!matches.isEmpty()){
-                PlaySong song = new PlaySong();
-                Thread th1 = new Thread(song);
-                th1.start();
+            if(matchIds.size() > 0){
+                getMatch(pickMatches.getSelectionModel().getSelectedIndex());
             }
         });
         
@@ -230,14 +230,14 @@ public class Main extends Application {
 
         @Override
         public void run() {
-            int tempo = Integer.parseInt(inTempo.getText());
+            songTempo = Integer.parseInt(inTempo.getText());
             //Get all events
             ArrayList<Event> events = matches.get(0).getEventList();
             long time = System.currentTimeMillis();
             //Go through every event
             for(Event e : events){
                 //Wait until the sound is ready to play
-                while(System.currentTimeMillis() - time < e.getTimeStamp() / tempo){
+                while(System.currentTimeMillis() - time < e.getTimeStamp() / songTempo){
 
                 }
                 boolean play = false;
@@ -315,6 +315,9 @@ public class Main extends Application {
         System.out.println("Parsed Match");
         matches.add(match);
         callingAPI = false;
+        PlaySong song = new PlaySong();
+        Thread th1 = new Thread(song);
+        th1.start();
         //FXCollections.observableArrayList(matches)
     }
     //Called whenever a list of match ids is retrieved from the server
@@ -322,9 +325,12 @@ public class Main extends Application {
         System.out.println("Got Match Ids");
         if(ids != null){
             matchIds.addAll(ids);
+            Platform.runLater(() -> {
+                    pickMatches.getSelectionModel().select(0);
+            });
+            
         }
         callingAPI = false;
-        getMatch(ids.get(0));
     }
     
     
@@ -355,13 +361,16 @@ public class Main extends Application {
                 con.connect();
                 int statusCode = con.getResponseCode();
                 if(statusCode == HttpsURLConnection.HTTP_OK){
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line = null;
-                        while((line = reader.readLine()) != null){
-                                sb.append(line);
-                        }
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+                    while((line = reader.readLine()) != null){
+                            sb.append(line);
+                    }
+                    Platform.runLater(() -> {
                         recievedMatch(JSONUtils.MatchParser.parseMatch(sb.toString()));
+                    });
+                        
                 }
             } catch (IOException e) {
                     // TODO Auto-generated catch block

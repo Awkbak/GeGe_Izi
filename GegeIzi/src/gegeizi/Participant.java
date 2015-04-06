@@ -45,14 +45,18 @@ public class Participant {
         //Objects
         timeline = new ParticipantTimeline((JSONObject) obj.get("timeline"));
         //Arrays
-        JSONArray arr = (JSONArray) obj.get("masteries");
-        for (Object arr1 : arr) {
-            masteries.add(new RuneMastery((JSONObject) arr1, "Mastery"));
+        JSONArray arr;
+        if(obj.containsKey("masteries")){
+            arr = (JSONArray) obj.get("masteries");
+            for (Object arr1 : arr) {
+                masteries.add(new RuneMastery((JSONObject) arr1, "Mastery"));
+            }
         }
-        
-        arr = (JSONArray) obj.get("runes");
-        for (Object arr1 : arr) {
-            runes.add(new RuneMastery((JSONObject) arr1, "Rune"));
+        if(obj.containsKey("runes")){
+            arr = (JSONArray) obj.get("runes");
+            for (Object arr1 : arr) {
+                runes.add(new RuneMastery((JSONObject) arr1, "Rune"));
+            }
         }
     }
     
