@@ -80,12 +80,13 @@ public class Main extends Application {
         for(int i=0;i<numevents;i++){
             CheckBox k = new CheckBox(eve[i]);
             k.relocate(350,180+30*i);
+            k.setSelected(true);
             allBoxes.getChildren().add(k);
             k.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
                 int x = allBoxes.getChildren().indexOf(k);
                 eventTypes[x] = newValue;
             });
-            eventTypes[i] = false;
+            eventTypes[i] = true;
         }
     }
     
