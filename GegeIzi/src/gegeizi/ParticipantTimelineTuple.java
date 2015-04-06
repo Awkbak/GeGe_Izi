@@ -21,8 +21,12 @@ public class ParticipantTimelineTuple {
     
     public ParticipantTimelineTuple(JSONObject obj){
         //doubles
-        tenToTwenty = (double) obj.get("tenToTwenty");
-        zeroToTen = (double) obj.get("zeroToTen");
+        if(obj.containsKey("tenToTwenty")){
+            tenToTwenty = (double) obj.get("tenToTwenty");
+        }
+        if(obj.containsKey("zeroToTen")){
+            zeroToTen = (double) obj.get("zeroToTen");
+        }
     }
 
     public double getTenToTwenty() {
