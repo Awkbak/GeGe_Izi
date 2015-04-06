@@ -97,6 +97,7 @@ public class Main extends Application {
     }
     
     public void spinDisk(){
+        
         for(int i = 0;i<3600;i++){
             spinning.setRotate(i);
             try {
@@ -239,15 +240,39 @@ public class Main extends Application {
                 while(System.currentTimeMillis() - time < e.getTimeStamp() / tempo){
 
                 }
-                //Get the sond based on participantId
-                sound = (int) e.getParticipantId() - 1;
-                if(sound == -1){
-                    sound = 0;
+                boolean play = false;
+                if(e.getEventType().equals("CHAMPION_KILL") && eventTypes[0]){
+                    play = true;
                 }
-                //Play sound on JavaFX thread (Can only play a sound on that thread)
-                Platform.runLater(() -> {
-                    mainKeyboard.PlaySound(sound);
-                });
+                else if(e.getEventType().equals("BUILDING_KILL") && eventTypes[1]){
+                    play = true;
+                }
+                else if(e.getEventType().equals("SKILL_LEVEL_UP") && eventTypes[2]){
+                    play = true;
+                }
+                else if(e.getEventType().equals("ITEM_PURCHASED") && eventTypes[3]){
+                    play = true;
+                }
+                else if(e.getEventType().equals("WARD_PLACED") && eventTypes[4]){
+                    play = true;
+                }
+                else if(e.getEventType().equals("ITEM_DESTROYED") && eventTypes[5]){
+                    play = true;
+                }
+                else if(e.getEventType().equals("ELITE_MONSTER_KILL") && eventTypes[6]){
+                    play = true;
+                }
+                if(play){
+                    //Get the sond based on participantId
+                    sound = (int) e.getParticipantId() - 1;
+                    if(sound == -1){
+                        sound = 0;
+                    }
+                    //Play sound on JavaFX thread (Can only play a sound on that thread)
+                    Platform.runLater(() -> {
+                        mainKeyboard.PlaySound(sound);
+                    });
+                }
             }
         }
         

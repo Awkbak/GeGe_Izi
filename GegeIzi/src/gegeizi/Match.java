@@ -194,4 +194,8 @@ public class Match {
         }
         return events;
     }
+    
+    public int getChampionId(int participantId){
+        return (int) participants.get(participantId).getChampionId();
+    }
 }
