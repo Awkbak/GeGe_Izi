@@ -12,10 +12,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -23,8 +19,10 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -54,14 +52,30 @@ Completable Future Sample
  * @author Awkbak
  */
 public class Main extends Application {
+    final int numevents = 7; //Number of Possible events. Change as needed.
+    Group allBoxes = new Group();
     ComboBox pickMatches;
     Keyboard mainKeyboard;
+    boolean[] eventTypes;
     ImageView spinning;
+    int songTempo;
+    String eventFilter;
     
     //ExecutorService threadpool; //Keeps too many threads from running
     ArrayList<Match> matches; //A list of currently loaded matches
     ObservableList<Long> matchIds; //A list of currently loaded match ids
+
     boolean callingAPI; //Is the api currently being used?
+    
+    public void initBoxes(){
+        String[] eve = {"Champion Kill","Building Kill","Skill level-up","Item Purchased","Ward Placed","Item Destroyed","Elite Monster Kill"};
+        
+        for(int i=0;i<numevents;i++){
+            CheckBox k = new CheckBox(eve[i]);
+            k.relocate(350,180+30*i);
+            allBoxes.getChildren().add(k);
+        }
+    }
     
     public void initKeyboard(){
         String[] kek = new String[10];
@@ -89,6 +103,8 @@ public class Main extends Application {
         spinning = new ImageView(j);
         spinning.relocate(100, 100);
         
+        
+        
         /*CompletableFuture<Integer> F = CompletableFuture.supplyAsync(() ->{
             spinDisk();
             return null;
@@ -99,6 +115,9 @@ public class Main extends Application {
             });
         });*/
         //threadpool = Executors.newFixedThreadPool(4);
+        
+        initBoxes();
+        
         matches = new ArrayList<>();
         matchIds = FXCollections.observableArrayList();
         callingAPI = false;
@@ -139,7 +158,7 @@ public class Main extends Application {
         
                 
         Pane root = new Pane();
-        root.getChildren().addAll(mainKeyboard,pickMatches,spinning,btn,inTempo,elTempo,elList);
+        root.getChildren().addAll(mainKeyboard,pickMatches,spinning,btn,inTempo,elTempo,elList,allBoxes);
         
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
