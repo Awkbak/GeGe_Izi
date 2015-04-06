@@ -63,7 +63,9 @@ public class Main extends Application {
     int songTempo;
     String eventFilter;
     
-    //ExecutorService threadpool; //Keeps too many threads from running
+    
+    TextField inTempo;
+    
     ArrayList<Match> matches; //A list of currently loaded matches
     ObservableList<Long> matchIds; //A list of currently loaded match ids
 
@@ -138,7 +140,7 @@ public class Main extends Application {
         elList.setFont(new Font("Cambria",14));
         elList.relocate(490, 255);
         
-        TextField inTempo = new TextField();
+        inTempo = new TextField();
         inTempo.setPrefSize(75, 30);
         inTempo.relocate(550,200); 
         inTempo.setText("100");
@@ -149,6 +151,9 @@ public class Main extends Application {
         
         initKeyboard();
 
+        matches = new ArrayList<>();
+        getMatchIds();
+        
         Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
         Button btn = new Button("",new ImageView(img));
         btn.relocate(550, 290);
@@ -157,11 +162,12 @@ public class Main extends Application {
             //int n = s.nextInt(10);
             //mainKeyboard.PlaySound(n);
 
-            
             //Make sure you have a match loaded before using
-            //PlaySong song = new PlaySong();
-            //Thread th1 = new Thread(song);
-            //th1.start();
+            if(!matches.isEmpty()){
+                PlaySong song = new PlaySong();
+                Thread th1 = new Thread(song);
+                th1.start();
+            }
         });
         
                 
@@ -191,7 +197,7 @@ public class Main extends Application {
         public void run() {
             //Note the time is multiplied by tempo for testing
             //so everything isn't played at once/easier to make example times
-            int tempo = 10; 
+            int tempo = Integer.parseInt(inTempo.getText()); 
             ArrayList<Integer> testEvents = new ArrayList<>();
             testEvents.add(500);
             testEvents.add(750);
@@ -234,7 +240,10 @@ public class Main extends Application {
 
                 }
                 //Get the sond based on participantId
-                sound = (int) e.getParticipantId();
+                sound = (int) e.getParticipantId() - 1;
+                if(sound == -1){
+                    sound = 0;
+                }
                 //Play sound on JavaFX thread (Can only play a sound on that thread)
                 Platform.runLater(() -> {
                     mainKeyboard.PlaySound(sound);
@@ -242,13 +251,6 @@ public class Main extends Application {
             }
         }
         
-    }
-    
-    //Get a match using the current time (rounded to 5 minutes)
-    public void getMatch(){
-        long epoch = 1427986200;
-        
-        //long epoch = System.currentTimeMillis() / 1000;
     }
     
     //Get a match by its id
@@ -275,6 +277,14 @@ public class Main extends Application {
         
     }
     
+    public void getMatchIds(){
+        long epoch = 1428198000;
+        epoch = epoch + (((int) (Math.random() * 10)) * 300);
+        System.out.println(epoch);
+        getMatchIds(epoch);
+        
+    }
+    
     //Called whenever a match is constructed from the api
     public void recievedMatch(Match match){
         System.out.println("Parsed Match");
@@ -289,6 +299,7 @@ public class Main extends Application {
             matchIds.addAll(ids);
         }
         callingAPI = false;
+        getMatch(ids.get(0));
     }
     
     
