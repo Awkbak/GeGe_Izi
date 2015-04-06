@@ -229,7 +229,7 @@ public class Main extends Application {
 
         @Override
         public void run() {
-            int tempo = 100;
+            int tempo = Integer.parseInt(inTempo.getText());
             //Get all events
             ArrayList<Event> events = matches.get(0).getEventList();
             long time = System.currentTimeMillis();
