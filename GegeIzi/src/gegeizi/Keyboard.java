@@ -21,7 +21,7 @@ public class Keyboard extends Group{
         for(int i = 0;i<10;i++){
             board[i] = new Key(kek[i]);
             
-            if(i==5)board[i].relocate(125+100*i,400);
+            if(i>=5)board[i].relocate(175+50*i,400);
             else board[i].relocate(125+50*i,400);
             board[i].setOnMouseClicked(this::testKey);
             board[i].setImage(chk[i]);

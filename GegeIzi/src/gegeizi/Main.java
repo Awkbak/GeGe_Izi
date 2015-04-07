@@ -107,7 +107,7 @@ public class Main extends Application {
             n.setCycleCount(10);
             n.setAutoReverse(false);
             n.getKeyFrames().add(new KeyFrame(Duration.millis(2000),new KeyValue (spinning.rotateProperty(),360)));
-            n.play();
+            n.playFromStart();
     }
     
     @Override
