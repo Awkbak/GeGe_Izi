@@ -2,9 +2,11 @@ package gegeizi;
 
 
 import java.net.URL;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 
@@ -13,6 +15,7 @@ import javafx.scene.shape.Rectangle;
  * @author Awkbak
  */
 public class Key extends Rectangle {
+    private Image mainimage;
     final private URL resource;
     final private Media tone;
     private MediaPlayer tonePlayer;
@@ -41,11 +44,17 @@ public class Key extends Rectangle {
         this.setArcHeight(5);
         this.setArcWidth(5);
     }
+    public void setImage(int imID){
+        String ad = "Splash/" + imID +".jpg";
+        mainimage = new Image(getClass().getResourceAsStream(ad),50,140,false,false);
+        ImagePattern min = new ImagePattern(mainimage);
+        this.setFill(min);
+    }
     public void PlaySound(){
         tonePlayer = new MediaPlayer(tone);
-        setFill(Color.GREY);
+        this.setOpacity(0.4);
         tonePlayer.setOnEndOfMedia(() -> {
-            setFill(Color.SNOW);
+            this.setOpacity(1);
         });
         tonePlayer.play();
     }

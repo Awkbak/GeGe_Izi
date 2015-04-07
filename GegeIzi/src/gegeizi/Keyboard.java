@@ -31,6 +31,18 @@ public class Keyboard extends Group{
             board[i] = new Key(kek[i]);
             board[i].relocate(150+50*i,400);
             board[i].setOnMouseClicked(this::testKey);
+            board[i].setImage(8);
+            this.getChildren().add(board[i]);
+        }
+    }
+    
+    public Keyboard(String[] kek, int[] chk){
+        board = new Key[10];
+        for(int i = 0;i<10;i++){
+            board[i] = new Key(kek[i]);
+            board[i].relocate(150+50*i,400);
+            board[i].setOnMouseClicked(this::testKey);
+            board[i].setImage(chk[i]);
             this.getChildren().add(board[i]);
         }
     }

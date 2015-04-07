@@ -92,11 +92,12 @@ public class Main extends Application {
     
     public void initKeyboard(){
         String[] kek = new String[10];
+        int[] o = {1,3,6,2,4,5,9,8,7,10};
         for(int i =0;i<10;i++){
             String s = "Key" + i + ".mp3";
             kek[i] = s;
         }
-        mainKeyboard = new Keyboard(kek);
+        mainKeyboard = new Keyboard(kek,o);
     }
     
     public void spinDisk(){
@@ -160,12 +161,9 @@ public class Main extends Application {
         
         Image img = new Image(getClass().getResourceAsStream("Triurfant.jpg"));
         Button btn = new Button("",new ImageView(img));
+        
         btn.relocate(550, 290);
         btn.setOnAction((ActionEvent event) -> {
-            //Random s = new Random();
-            //int n = s.nextInt(10);
-            //mainKeyboard.PlaySound(n);
-            
             //Make sure you have a match loaded before using
             if(matchIds.size() > 0){
                 getMatch(pickMatches.getSelectionModel().getSelectedIndex());
