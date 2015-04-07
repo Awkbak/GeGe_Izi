@@ -15,14 +15,15 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -35,6 +36,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -92,7 +94,7 @@ public class Main extends Application {
     
     public void initKeyboard(){
         String[] kek = new String[10];
-        int[] o = {1,3,6,2,4,5,9,8,7,10};
+        int[] o = {11,3,6,12,4,5,9,8,7,10};
         for(int i =0;i<10;i++){
             String s = "Key" + i + ".mp3";
             kek[i] = s;
@@ -101,15 +103,11 @@ public class Main extends Application {
     }
     
     public void spinDisk(){
-        while(true){
-            spinning.setRotate(spinning.getRotate() + 1);
-            //try {
-            //    wait(10);
-            //} catch (InterruptedException ex) {
-            //    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            //}
-            
-        }
+            Timeline n = new Timeline();
+            n.setCycleCount(10);
+            n.setAutoReverse(false);
+            n.getKeyFrames().add(new KeyFrame(Duration.millis(2000),new KeyValue (spinning.rotateProperty(),360)));
+            n.play();
     }
     
     @Override
@@ -118,17 +116,6 @@ public class Main extends Application {
         spinning = new ImageView(j);
         spinning.relocate(100, 100);
         
-        
-        
-        CompletableFuture<Integer> F = CompletableFuture.supplyAsync(() ->{
-            spinDisk();
-            return null;
-        });
-        F.whenComplete((ok,ex)->{
-            Platform.runLater(()->{
-                
-            });
-        });
         //threadpool = Executors.newFixedThreadPool(4);
         
         initBoxes();
@@ -167,6 +154,7 @@ public class Main extends Application {
             //Make sure you have a match loaded before using
             if(matchIds.size() > 0){
                 getMatch(pickMatches.getSelectionModel().getSelectedIndex());
+                spinDisk();
             }
         });
         

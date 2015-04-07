@@ -7,6 +7,7 @@ package gegeizi;
 
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -15,34 +16,17 @@ import javafx.scene.input.MouseEvent;
 public class Keyboard extends Group{ 
     final private Key[] board;
     
-    public Keyboard(){
-        board = new Key[10];
-        for(int i = 0;i<10;i++){
-            board[i] = new Key();
-            board[i].relocate(150+50*i,400);
-            board[i].setOnMouseClicked(this::testKey);
-            this.getChildren().add(board[i]);
-        }
-    }
-    
-    public Keyboard(String[] kek){
-        board = new Key[10];
-        for(int i = 0;i<10;i++){
-            board[i] = new Key(kek[i]);
-            board[i].relocate(150+50*i,400);
-            board[i].setOnMouseClicked(this::testKey);
-            board[i].setImage(8);
-            this.getChildren().add(board[i]);
-        }
-    }
-    
     public Keyboard(String[] kek, int[] chk){
         board = new Key[10];
         for(int i = 0;i<10;i++){
             board[i] = new Key(kek[i]);
-            board[i].relocate(150+50*i,400);
+            
+            if(i==5)board[i].relocate(125+100*i,400);
+            else board[i].relocate(125+50*i,400);
             board[i].setOnMouseClicked(this::testKey);
             board[i].setImage(chk[i]);
+            if(i<5)board[i].setStroke(Color.ROYALBLUE);
+            else board[i].setStroke(Color.RED);
             this.getChildren().add(board[i]);
         }
     }
