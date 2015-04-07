@@ -164,7 +164,11 @@ public class Main extends Application {
         
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Sounds of URF");
+        primaryStage.setMaxHeight(650);
+        primaryStage.setMaxWidth(810);
+        primaryStage.setMinHeight(650);
+        primaryStage.setMinWidth(810);
         primaryStage.setScene(scene);
         primaryStage.show();
         
