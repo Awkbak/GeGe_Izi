@@ -75,6 +75,7 @@ public class Main extends Application {
     ObservableList<Long> matchIds; //A list of currently loaded match ids
 
     boolean callingAPI; //Is the api currently being used?
+    boolean isPlaying = false;
     
     public void initBoxes(){
         eventTypes = new boolean[numevents];
@@ -157,7 +158,7 @@ public class Main extends Application {
         btn.relocate(550, 290);
         btn.setOnAction((ActionEvent event) -> {
             //Make sure you have a match loaded before using
-            if(matchIds.size() > 0){
+            if(matchIds.size() > 0 && !isPlaying){
                 getMatch(pickMatches.getSelectionModel().getSelectedIndex());
                 spinDisk();
                 songPlaying.setProgress(-1);
@@ -186,43 +187,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-     
-    class PlaySongConcept implements Runnable{
-        
-        int sound = 0;
-        
-        @Override
-        public void run() {
-            //Note the time is multiplied by tempo for testing
-            //so everything isn't played at once/easier to make example times
-            int tempo = Integer.parseInt(inTempo.getText()); 
-            ArrayList<Integer> testEvents = new ArrayList<>();
-            testEvents.add(500);
-            testEvents.add(750);
-            testEvents.add(1000);
-            testEvents.add(1100);
-            testEvents.add(1200);
-            testEvents.add(1500);
-            testEvents.add(1550);
-            long time = System.currentTimeMillis();
-            //Go through every event
-            for(Integer e : testEvents){ 
-                //Wait until the sound is ready to play
-                while(System.currentTimeMillis() - time < e * tempo){
-
-                }
-                //Change sonds every time (Will be getting sound based on event type or participantId)
-                sound ++;
-                //Sounds have to be played on the JavaFX thread. THis does that
-                Platform.runLater(() -> {
-                    mainKeyboard.PlaySound(sound);
-                });
-             }
-            Platform.runLater(()->{
-                songPlaying.setProgress(1);
-            });
-        }
-    }
     
     class PlaySong implements Runnable{
 
@@ -230,9 +194,11 @@ public class Main extends Application {
 
         @Override
         public void run() {
+            isPlaying = true;
             songTempo = Integer.parseInt(inTempo.getText());
             //Get all events
             ArrayList<Event> events = matches.get(0).getEventList();
+            matches.remove(0);
             long time = System.currentTimeMillis();
             //Go through every event
             for(Event e : events){
@@ -274,8 +240,10 @@ public class Main extends Application {
                     });
                 }
             }
-            matches.remove(0);
-            events = null;
+            Platform.runLater(()->{
+                songPlaying.setProgress(1);
+            });
+            isPlaying = false;            
         }
         
     }

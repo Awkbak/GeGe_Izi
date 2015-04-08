@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 
 /**
@@ -51,11 +52,15 @@ public class Key extends Rectangle {
         this.setFill(min);
     }
     public void PlaySound(){
-        tonePlayer = new MediaPlayer(tone);
+        //tonePlayer = new MediaPlayer(tone);
+        tonePlayer.seek(new Duration(0));
         this.setOpacity(0.4);
         tonePlayer.setOnEndOfMedia(() -> {
+            
             this.setOpacity(1);
+            
         });
         tonePlayer.play();
+        
     }
 }
