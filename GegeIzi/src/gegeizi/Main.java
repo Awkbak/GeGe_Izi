@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
@@ -29,7 +30,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -59,8 +59,6 @@ Completable Future Sample
  */
 public class Main extends Application {
     final int numevents = 7; //Number of Possible events. Change as needed.
-    boolean isPlaying = false;
-    ProgressBar songPlaying;
     Group allBoxes = new Group();
     ComboBox pickMatches;
     Keyboard mainKeyboard;
@@ -143,9 +141,6 @@ public class Main extends Application {
         elTempo.setFont(new Font("Cambria",14));
         elTempo.relocate(500,205);
         
-        songPlaying = new ProgressBar(0);
-        songPlaying.relocate(100,550);
-        songPlaying.setPrefSize(600,25);
         initKeyboard();
 
         //matches = new ArrayList<>();
@@ -158,7 +153,6 @@ public class Main extends Application {
         btn.setOnAction((ActionEvent event) -> {
             //Make sure you have a match loaded before using
             if(matchIds.size() > 0){
-                songPlaying.setProgress(-1);
                 getMatch(pickMatches.getSelectionModel().getSelectedIndex());
                 spinDisk();
             }
@@ -166,7 +160,7 @@ public class Main extends Application {
         
                 
         Pane root = new Pane();
-        root.getChildren().addAll(mainKeyboard,pickMatches,spinning,btn,inTempo,elTempo,elList,allBoxes,songPlaying);
+        root.getChildren().addAll(mainKeyboard,pickMatches,spinning,btn,inTempo,elTempo,elList,allBoxes);
         
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
@@ -271,9 +265,8 @@ public class Main extends Application {
                     });
                 }
             }
-            Platform.runLater(() ->{
-                songPlaying.setProgress(1);
-            });
+            matches.remove(0);
+            events = null;
         }
         
     }
@@ -315,6 +308,11 @@ public class Main extends Application {
         System.out.println("Parsed Match");
         matches.add(match);
         callingAPI = false;
+        Key[] board = mainKeyboard.getBoard();
+        ArrayList<Integer> champs = match.getChampionIds();
+        for(int e = 0; e < board.length; e ++){
+           board[e].setImage(champs.get(e));
+        }
         PlaySong song = new PlaySong();
         Thread th1 = new Thread(song);
         th1.start();

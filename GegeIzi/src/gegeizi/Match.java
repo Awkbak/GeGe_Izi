@@ -198,4 +198,12 @@ public class Match {
     public int getChampionId(int participantId){
         return (int) participants.get(participantId).getChampionId();
     }
+    
+    public ArrayList<Integer> getChampionIds(){
+        ArrayList<Integer> ids = new ArrayList<>();
+        for(Participant e : participants){
+            ids.add((int) e.getChampionId());
+        }
+        return ids;
+    }
 }
