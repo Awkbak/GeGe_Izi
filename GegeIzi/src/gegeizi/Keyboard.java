@@ -38,4 +38,8 @@ public class Keyboard extends Group{
     public void testKey(MouseEvent e){
         ((Key)e.getSource()).PlaySound();
     }
+    
+    public Key[] getBoard(){
+        return board;
+    }
 }

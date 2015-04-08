@@ -265,6 +265,8 @@ public class Main extends Application {
                     });
                 }
             }
+            matches.remove(0);
+            events = null;
         }
         
     }
@@ -306,6 +308,11 @@ public class Main extends Application {
         System.out.println("Parsed Match");
         matches.add(match);
         callingAPI = false;
+        Key[] board = mainKeyboard.getBoard();
+        ArrayList<Integer> champs = match.getChampionIds();
+        for(int e = 0; e < board.length; e ++){
+           board[e].setImage(champs.get(e));
+        }
         PlaySong song = new PlaySong();
         Thread th1 = new Thread(song);
         th1.start();
