@@ -3,6 +3,7 @@ package gegeizi;
 
 import java.net.URL;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -35,8 +36,10 @@ public class Key extends Rectangle {
     }
     public Key(String s){
         resource = getClass().getResource(s);
+        System.out.println(resource == null);
         tone = new Media(resource.toString());
         tonePlayer = new MediaPlayer(tone);
+        //tonePlayer.setVolume(100);
         this.setWidth(50);
         this.setHeight(140);
         this.setStrokeWidth(3);
@@ -53,14 +56,17 @@ public class Key extends Rectangle {
     }
     public void PlaySound(){
         //tonePlayer = new MediaPlayer(tone);
-        tonePlayer.seek(new Duration(0));
-        this.setOpacity(0.4);
-        tonePlayer.setOnEndOfMedia(() -> {
-            
-            this.setOpacity(1);
-            
-        });
-        tonePlayer.play();
-        
+        if(tonePlayer.getStatus().equals(MediaPlayer.Status.PLAYING)){
+            tonePlayer.seek(new Duration(0));
+            this.setOpacity(0.4);
+        }
+        if(!tonePlayer.getStatus().equals(MediaPlayer.Status.PLAYING)){
+            this.setOpacity(0.4);
+            tonePlayer.setOnEndOfMedia(() -> {
+                this.setOpacity(1);
+
+            });
+            tonePlayer.play();
+        }
     }
 }
