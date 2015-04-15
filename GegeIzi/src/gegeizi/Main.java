@@ -96,7 +96,7 @@ public class Main extends Application {
         String[] fileName = new String[10];
         int[] o = {17,17,17,17,17,17,17,17,17,17};
         for(int i =0;i<10;i++){
-            String s = "Key" + i + ".mp3";
+            String s = "" + i;
             fileName[i] = s;
         }
         mainKeyboard = new Keyboard(fileName,o);
