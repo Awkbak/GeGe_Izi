@@ -1,9 +1,11 @@
 package gegeizi;
 
 
+
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -29,6 +31,7 @@ public class Key extends Rectangle {
     private  MidiChannel[] channels;
     private int channel;
     private int volume;
+    private FadeTransition animate;
     private int duration;
     private int note;
     
@@ -48,6 +51,13 @@ public class Key extends Rectangle {
         resource = getClass().getResource(s);
         tone = new Media(resource.toString());
         tonePlayer = new MediaPlayer(tone);
+        
+        animate = new FadeTransition(Duration.millis(50),this);
+        animate.setFromValue(1.0);
+        animate.setToValue(0.5);
+        animate.setCycleCount(2);
+        animate.setAutoReverse(true);
+        
         this.setWidth(50);
         this.setHeight(140);
         this.setStrokeWidth(3);
@@ -106,7 +116,11 @@ public class Key extends Rectangle {
         ImagePattern min = new ImagePattern(mainimage);
         this.setFill(min);
     }
-    public void PlaySound(){        
+    public void PlaySound(){
+        animate.playFromStart();
+        
+
+        
         if(!synth.isOpen()){
             try {
                 synth.open();
@@ -119,6 +133,47 @@ public class Key extends Rectangle {
         }
         catch (Exception e) {
             //e.printStackTrace();
+        }
+    }
+    
+    public class MakeNoise implements Runnable{
+        @Override
+        public void run() {
+            AudioListener listener = new AudioListener();
+            AudioInputStream audioInputStream = null;
+            try {
+                audioInputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream(name)));
+                Clip clip = AudioSystem.getClip();
+                clip.addLineListener(listener);
+                clip.open(audioInputStream);
+                
+                try {
+                    clip.start();
+                    listener.waitUntilDone();
+                    Platform.runLater(() -> {
+                        setOpacity(1);
+                    });
+                    
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    clip.close();
+                }
+            } catch (LineUnavailableException ex) {
+                Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedAudioFileException ex) {
+                Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    if(audioInputStream != null){
+                        audioInputStream.close();
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         
     }
