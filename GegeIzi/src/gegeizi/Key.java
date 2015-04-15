@@ -1,12 +1,15 @@
 package gegeizi;
 
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -44,6 +47,7 @@ public class Key extends Rectangle {
     private int duration;
     private File sound;
     private String name;
+    private int note;
     
     public Key(){
         resource = null;
@@ -73,6 +77,37 @@ public class Key extends Rectangle {
         channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
         volume = 80; // between 0 et 127
         duration = 50; // in milliseconds
+        note = 45 + 12;
+        if(s.equals("Key0.mp3")){
+            note = 45 + 12;
+        }
+        else if(s.equals("Key1.mp3")){
+            note = 47 + 12;
+        }
+        else if(s.equals("Key2.mp3")){
+            note = 48 + 12;
+        }
+        else if(s.equals("Key3.mp4")){
+            note = 50 + 12;
+        }
+        else if(s.equals("Key4.mp3")){
+            note = 52 + 12;
+        }
+        else if(s.equals("Key5.mp3")){
+            note = 53 + 12;
+        }
+        else if(s.equals("Key6.mp4")){
+            note = 55 + 12;
+        }
+        else if(s.equals("Key7.mp3")){
+            note = 57 + 12;
+        }
+        else if(s.equals("Key8.mp3")){
+            note = 59 + 12;
+        }
+        else if(s.equals("Key9.mp4")){
+            note = 60 + 12;
+        }
         try {
             this.synth = MidiSystem.getSynthesizer();
             this.synth.open();
@@ -89,11 +124,18 @@ public class Key extends Rectangle {
         this.setFill(min);
     }
     public void PlaySound(){
+       /* tonePlayer = new MediaPlayer(tone);
+        this.setOpacity(0.6);
+        tonePlayer.setOnEndOfMedia(() -> {
+                this.setOpacity(1);
+                closeSynth();
+        });
         
-        //tonePlayer = new MediaPlayer(tone);
-        //tonePlayer.seek(new Duration(0));
+        tonePlayer.play();
+        */
+        
         /*if(tonePlayer.getStatus().equals(MediaPlayer.Status.PLAYING)){
-           
+            tonePlayer.seek(new Duration(0));
             this.setOpacity(0.4);
         }
         //if(!tonePlayer.getStatus().equals(MediaPlayer.Status.PLAYING)){
@@ -102,14 +144,14 @@ public class Key extends Rectangle {
                 this.setOpacity(1);
 
             });
-            tonePlayer.play();
+            
         //}*/
        
        //this.setOpacity(0.4);
        //Thread th = new Thread(new MakeNoise());
        //th.start();
         
-        /*if(!synth.isOpen()){
+        if(!synth.isOpen()){
             try {
                 synth.open();
             } catch (MidiUnavailableException ex) {
@@ -117,7 +159,7 @@ public class Key extends Rectangle {
             }
         }
         midiTest();
-                */
+        
     }
     
     public void closeSynth(){
@@ -137,8 +179,8 @@ public class Key extends Rectangle {
                 // "MIDI note number" (pitch of the note),
                 // and "velocity" (i.e., volume, or intensity).
                 // Each of these arguments is between 0 and 127.
-                channels[channel].noteOn( 60, volume ); // C note
-
+                channels[channel].noteOn(note, volume ); // C note
+                
 
                 // --------------------------------------
                 // Play a C major chord.
@@ -159,14 +201,18 @@ public class Key extends Rectangle {
             AudioListener listener = new AudioListener();
             AudioInputStream audioInputStream = null;
             try {
-                audioInputStream = AudioSystem.getAudioInputStream(Key.class.getClassLoader().getResourceAsStream(name));
+                audioInputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(getClass().getResourceAsStream(name)));
                 Clip clip = AudioSystem.getClip();
                 clip.addLineListener(listener);
                 clip.open(audioInputStream);
+                
                 try {
                     clip.start();
                     listener.waitUntilDone();
-                    setOpacity(1);
+                    Platform.runLater(() -> {
+                        setOpacity(1);
+                    });
+                    
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
@@ -188,21 +234,22 @@ public class Key extends Rectangle {
                 }
             }
         }
-    
+        
+        class AudioListener implements LineListener {
+            private boolean done = false;
+            @Override public synchronized void update(LineEvent event) {
+                Type eventType = event.getType();
+                if (eventType == Type.STOP || eventType == Type.CLOSE) {
+                    done = true;
+                    notifyAll();
+                }
+            }
+            public synchronized void waitUntilDone() throws InterruptedException {
+                while (!done) { wait(); }
+            }
+        }
 
     }
     
-    class AudioListener implements LineListener {
-        private boolean done = false;
-        @Override public synchronized void update(LineEvent event) {
-            Type eventType = event.getType();
-            if (eventType == Type.STOP || eventType == Type.CLOSE) {
-                done = true;
-                notifyAll();
-            }
-        }
-        public synchronized void waitUntilDone() throws InterruptedException {
-            while (!done) { wait(); }
-        }
-    }
+    
 }
