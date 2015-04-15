@@ -55,8 +55,14 @@ public class Key extends Rectangle {
         this.setFill(min);
     }
     public void PlaySound(){
-        //tonePlayer = new MediaPlayer(tone);
-        if(tonePlayer.getStatus().equals(MediaPlayer.Status.PLAYING)){
+        tonePlayer = new MediaPlayer(tone);
+        this.setOpacity(0.6);
+        tonePlayer.setOnEndOfMedia(() -> {
+                this.setOpacity(1);
+        });
+        
+        tonePlayer.play();
+        /*if(tonePlayer.getStatus().equals(MediaPlayer.Status.PLAYING)){
             tonePlayer.seek(new Duration(0));
             this.setOpacity(0.4);
         }
@@ -66,7 +72,8 @@ public class Key extends Rectangle {
                 this.setOpacity(1);
 
             });
-            tonePlayer.play();
+            
         }
+         */
     }
 }

@@ -39,19 +39,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.net.ssl.HttpsURLConnection;
 
-/**
-Completable Future Sample
-* CompletableFuture<Summoner> F = CompletableFuture.supplyAsync(() ->{
-            current = getInfo(i);
-            return null;
-        });
-        F.whenComplete((ok,ex)->{
-            Platform.runLater(()->{
-                finished();
-                update();
-            });
-        });
- */
+
 
 /**
  * 
@@ -66,6 +54,7 @@ public class Main extends Application {
     boolean[] eventTypes;
     ImageView spinning;
     int songTempo;
+    long matchLength = 0;
     String eventFilter;
     
     
@@ -79,7 +68,7 @@ public class Main extends Application {
     
     public void initBoxes(){
         eventTypes = new boolean[numevents];
-        String[] eve = {"Champion Kill","Building Kill","Skill level-up","Item Purchased","Ward Placed","Item Destroyed","Elite Monster Kill"};
+        String[] eve = {"Champion Kill","Building Kill","Skill level-up","Item Purchased","Ward Placed","Item Destroyed","Dragon/Baron Kill"};
         
         for(int i=0;i<numevents;i++){
             CheckBox k = new CheckBox(eve[i]);
@@ -105,11 +94,14 @@ public class Main extends Application {
     }
     
     public void spinDisk(){
-            Timeline n = new Timeline();
-            n.setCycleCount(10);
-            n.setAutoReverse(false);
-            n.getKeyFrames().add(new KeyFrame(Duration.millis(2000),new KeyValue (spinning.rotateProperty(),360)));
-            n.playFromStart();
+        int cycle = 1000;
+        int ncycles = (int)matchLength * 10 / cycle;
+        Timeline n = new Timeline();
+        n.setCycleCount(ncycles);
+        n.setAutoReverse(false);
+        n.getKeyFrames().add(new KeyFrame(Duration.millis(cycle),new KeyValue (spinning.rotateProperty(),360)));
+        n.stop();
+        n.play();
     }
     
     @Override
@@ -160,7 +152,6 @@ public class Main extends Application {
             //Make sure you have a match loaded before using
             if(matchIds.size() > 0 && !isPlaying){
                 getMatch(pickMatches.getSelectionModel().getSelectedIndex());
-                spinDisk();
                 songPlaying.setProgress(-1);
             }
         });
@@ -194,6 +185,7 @@ public class Main extends Application {
 
         @Override
         public void run() {
+            spinDisk();
             isPlaying = true;
             songTempo = Integer.parseInt(inTempo.getText());
             //Get all events
@@ -275,13 +267,13 @@ public class Main extends Application {
     public void getMatchIds(){
         long epoch = 1428198000;
         epoch = epoch + (((int) (Math.random() * 10)) * 300);
-        System.out.println(epoch);
         getMatchIds(epoch);
         
     }
     
     //Called whenever a match is constructed from the api
     public void recievedMatch(Match match){
+        matchLength = match.getMatchDuration();
         System.out.println("Parsed Match");
         matches.add(match);
         callingAPI = false;
