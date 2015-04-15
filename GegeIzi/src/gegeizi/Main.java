@@ -85,7 +85,7 @@ public class Main extends Application {
     
     public void initKeyboard(){
         String[] kek = new String[10];
-        int[] o = {11,3,6,12,4,5,9,8,7,10};
+        int[] o = {17,17,17,17,17,17,17,17,17,17};
         for(int i =0;i<10;i++){
             String s = "Key" + i + ".mp3";
             kek[i] = s;
@@ -94,14 +94,14 @@ public class Main extends Application {
     }
     
     public void spinDisk(){
-        int cycle = 1000;
-        int ncycles = (int)matchLength * 10 / cycle;
+        int cycle = 2000;
+        songTempo = Integer.parseInt(inTempo.getText());
+        int ncycles = (int)matchLength * 1000 / (cycle*songTempo);
         Timeline n = new Timeline();
         n.setCycleCount(ncycles);
         n.setAutoReverse(false);
         n.getKeyFrames().add(new KeyFrame(Duration.millis(cycle),new KeyValue (spinning.rotateProperty(),360)));
-        n.stop();
-        n.play();
+        n.playFromStart();
     }
     
     @Override
