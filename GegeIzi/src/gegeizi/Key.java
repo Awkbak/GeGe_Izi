@@ -4,11 +4,13 @@ package gegeizi;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
@@ -44,6 +46,7 @@ public class Key extends Rectangle {
     private  MidiChannel[] channels;
     private int channel;
     private int volume;
+    private FadeTransition animate;
     private int duration;
     private File sound;
     private String name;
@@ -66,6 +69,13 @@ public class Key extends Rectangle {
         tone = new Media(resource.toString());
         tonePlayer = new MediaPlayer(tone);
         name = s;
+        
+        animate = new FadeTransition(Duration.millis(50),this);
+        animate.setFromValue(1.0);
+        animate.setToValue(0.5);
+        animate.setCycleCount(2);
+        animate.setAutoReverse(true);
+        
         this.setWidth(50);
         this.setHeight(140);
         this.setStrokeWidth(3);
@@ -124,6 +134,8 @@ public class Key extends Rectangle {
         this.setFill(min);
     }
     public void PlaySound(){
+        animate.playFromStart();
+        
        /* tonePlayer = new MediaPlayer(tone);
         this.setOpacity(0.6);
         tonePlayer.setOnEndOfMedia(() -> {
@@ -195,7 +207,6 @@ public class Key extends Rectangle {
     }
     
     public class MakeNoise implements Runnable{
-
         @Override
         public void run() {
             AudioListener listener = new AudioListener();
