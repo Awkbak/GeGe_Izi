@@ -95,7 +95,11 @@ public class Main extends Application {
     
     public void spinDisk(){
         int cycle = 2000;
-        songTempo = Integer.parseInt(inTempo.getText());
+        try{
+            songTempo = Integer.parseInt(inTempo.getText());
+        }catch(Exception e){
+            songTempo = 100;
+        }
         int ncycles = (int)matchLength * 1000 / (cycle*songTempo);
         Timeline n = new Timeline();
         n.setCycleCount(ncycles);
@@ -187,7 +191,11 @@ public class Main extends Application {
         public void run() {
             spinDisk();
             isPlaying = true;
-            songTempo = Integer.parseInt(inTempo.getText());
+            try{
+                songTempo = Integer.parseInt(inTempo.getText());
+            }catch(Exception e){
+                songTempo = 100;
+            }
             //Get all events
             ArrayList<Event> events = matches.get(0).getEventList();
             matches.remove(0);
