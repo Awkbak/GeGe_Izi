@@ -14,14 +14,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
@@ -39,13 +37,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.net.ssl.HttpsURLConnection;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiChannel;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Receiver;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Synthesizer;
 
 
 
@@ -108,10 +99,12 @@ public class Main extends Application {
             songTempo = 100;
         }
         int ncycles = (int)matchLength * 1000 / (cycle*songTempo);
-        Timeline n = new Timeline();
+        RotateTransition n = new RotateTransition(Duration.millis(cycle), spinning);
+        n.setFromAngle(0);
+        n.setToAngle(360);
         n.setCycleCount(ncycles);
+        n.setInterpolator(Interpolator.LINEAR);
         n.setAutoReverse(false);
-        n.getKeyFrames().add(new KeyFrame(Duration.millis(cycle),new KeyValue (spinning.rotateProperty(),360)));
         n.playFromStart();
     }
     
