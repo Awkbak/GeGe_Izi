@@ -72,6 +72,7 @@ public class Main extends Application {
         for(int i=0;i<numevents;i++){
             CheckBox k = new CheckBox(eve[i]);
             k.relocate(350,180+30*i);
+            k.setFont(new Font("Cambria",14));
             k.setSelected(true);
             allBoxes.getChildren().add(k);
             k.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -176,7 +177,7 @@ public class Main extends Application {
         
         //Create the scene and set it's properties
         Scene scene = new Scene(root, 800, 600);
-        scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+        //scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         //Set the Stage properties
         primaryStage.setTitle("Sounds of URF");
         primaryStage.setMaxHeight(650);
@@ -303,7 +304,7 @@ public class Main extends Application {
         matches.add(match);
         callingAPI = false;
         
-        //Get the keyboard and set the backgrounds to the corresponding champino image
+        //Get the keyboard and set the backgrounds to the corresponding champion splash art
         Key[] board = mainKeyboard.getBoard();
         ArrayList<Integer> champs = match.getChampionIds();
         for(int e = 0; e < board.length; e ++){
