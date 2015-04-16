@@ -73,13 +73,19 @@ public class Main extends Application {
             CheckBox k = new CheckBox(eve[i]);
             k.relocate(350,180+30*i);
             k.setFont(new Font("Cambria",14));
+            if(i==0)
             k.setSelected(true);
+            else
+                k.setSelected(false);
             allBoxes.getChildren().add(k);
             k.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
                 int x = allBoxes.getChildren().indexOf(k);
                 eventTypes[x] = newValue;
             });
+            if(i==0)
             eventTypes[i] = true;
+            else
+                eventTypes[i] = false;
         }
     }
     
@@ -99,7 +105,7 @@ public class Main extends Application {
         try{
             songTempo = Integer.parseInt(inTempo.getText());
         }catch(Exception e){
-            songTempo = 100;
+            songTempo = 50;
         }
         int ncycles = (int)matchLength * 1000 / (cycle*songTempo);
         RotateTransition n = new RotateTransition(Duration.millis(cycle), spinning);
@@ -144,7 +150,7 @@ public class Main extends Application {
         inTempo = new TextField();
         inTempo.setPrefSize(75, 30);
         inTempo.relocate(550,200); 
-        inTempo.setText("100");
+        inTempo.setText("50");
         
         Label elTempo = new Label("Tempo: ");
         elTempo.setFont(new Font("Cambria",14));
@@ -177,7 +183,7 @@ public class Main extends Application {
         
         //Create the scene and set it's properties
         Scene scene = new Scene(root, 800, 600);
-        //scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+        scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         //Set the Stage properties
         primaryStage.setTitle("Sounds of URF");
         primaryStage.setMaxHeight(650);
@@ -204,7 +210,7 @@ public class Main extends Application {
             try{
                 songTempo = Integer.parseInt(inTempo.getText());
             }catch(Exception e){
-                songTempo = 100;
+                songTempo = 50;
             }
             //Get all events
             ArrayList<Event> events = matches.get(0).getEventList();
