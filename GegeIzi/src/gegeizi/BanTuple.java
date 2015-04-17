@@ -39,5 +39,4 @@ public class BanTuple {
     public long getPickTurn() {
         return pickTurn;
     }
-    
 }
