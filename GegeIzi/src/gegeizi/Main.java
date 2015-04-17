@@ -206,9 +206,10 @@ public class Main extends Application {
         
         pickInstrument = new ComboBox(instrumentTypes);
         pickInstrument.getSelectionModel().select(0);
-        pickInstrument.selectionModelProperty().addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
-            System.out.println((String) newValue);
-            mainKeyboard.setInstrument((String) newValue);
+        //Set on change listener to Instrument list
+        pickInstrument.setOnAction((event) -> {
+            //CHange what instrument will play
+            mainKeyboard.setInstrument((String) pickInstrument.getSelectionModel().getSelectedItem());
         });
         
         Label elList = new Label("Match ID: ");
@@ -220,7 +221,9 @@ public class Main extends Application {
         stopThis.relocate(675, 360);
         
         stopThis.setOnAction((ActionEvent e)->{//When the Stop is clicked
-            
+            if(songRunnable != null){
+                songRunnable.terminate();
+            }
         });
         
         Image im = new Image(getClass().getResourceAsStream("Info.png"));
@@ -294,12 +297,15 @@ public class Main extends Application {
     }
     
     
-    
+    /**
+     * Play a song based on events in a League Match
+     */
     class PlaySong implements Runnable{
 
         int sound = 1;
         boolean keepPlaying = true;
         
+        //End the song/Close the thread
         public void terminate(){
             keepPlaying = false;
         }
@@ -312,8 +318,6 @@ public class Main extends Application {
             }catch(Exception e){
                 songTempo = 50;
             }
-            String instrument = (String) pickInstrument.getSelectionModel().getSelectedItem();
-            mainKeyboard.setInstrument(instrument);
             
             //Get all events
             ArrayList<Event> events = matches.get(0).getEventList();
@@ -328,14 +332,30 @@ public class Main extends Application {
             //Go through every event
             for(Event e : events){
                 if(!keepPlaying){
+                    //Finish the progress bar on JavaFX Thread
+                    Platform.runLater(()->{
+                        songPlaying.setProgress(1);
+                    });
+                    isPlaying = false;
+                    //Close the synths to immediately stop playing sounds
+                    for(Key key : mainKeyboard.getBoard()){
+                        key.closeSynth();
+                    }
                     return;
                 }
                 //Wait until the sound is ready to play
                 while(System.currentTimeMillis() - time < e.getTimeStamp() / songTempo){
+                    //End the song if thread is called to terminate
                     if(!keepPlaying){
+                        //Finish the progress bar on JavaFX Thread
+                        Platform.runLater(()->{
+                            songPlaying.setProgress(1);
+                        });
+                        isPlaying = false;
                         return;
                     }
                 }
+
                 boolean play = false;
                 //Only play a sound if the certain event type is checked in the UI
                 if(e.getEventType().equals("CHAMPION_KILL") && eventTypes[0]){
@@ -363,33 +383,31 @@ public class Main extends Application {
                     //Get the sound/key to play based on participantId
                     sound = (int) e.getParticipantId() - 1;
                     
-                    //If it's not a minion kill
+                    //If it's not a minion kill, play it
                     if(sound != -1){
-                        //Platform.runLater(()->{
-                            mainKeyboard.PlaySound(sound);
-                        //});
+                        mainKeyboard.PlaySound(sound);
                     }
                 }
             }
-            //Finish the progress bar
+            time = System.currentTimeMillis() + 2000;
+            while(time > System.currentTimeMillis()){}
+            for(Key key : mainKeyboard.getBoard()){
+                key.closeSynth();
+            }
+            //Finish the progress bar on JavaFX Thread
             Platform.runLater(()->{
                 songPlaying.setProgress(1);
             });
-            //Let the last sound finish before closing synths
-            time = System.currentTimeMillis();
-            while(System.currentTimeMillis() - time < 500){
-                
-            }
-            //Close the midi synth on keys
-            //for(Key e : mainKeyboard.getBoard()){
-            //    e.closeSynth();
-            //}
             isPlaying = false;            
         }
         
     }
     
-    //Get a match by its id
+    /**
+     * Get a match by its id 
+     * Callback = recievedMatch
+     * @param matchId MatchId to retrieve data for
+     */
     public void getMatch(long matchId){
         GetMatchInfo call = new GetMatchInfo("https://na.api.pvp.net/api/lol/na/v2.2/match/" + matchId + "?includeTimeline=true&api_key=" + ApiKey.API_KEY);
         //threadpool.execute(call);
@@ -397,12 +415,21 @@ public class Main extends Application {
         th.start();
     }
     
-    //Get a match by its index in matchIds
+    /**
+     * Get a match by its index in matchIds
+     * Callback = recievedMatch
+     * @param index Index within matchIds that contains the match Id
+     */
     public void getMatch(int index){
         getMatch(matchIds.get(index));
     }
     
-    //Note: the time is in epoch seconds (unix time in seconds) and must be in a multiple of 5 minutes
+    //
+    /**
+     * Get Match ids from a certain time bucket in the Riot API
+     * Callback = recievedMatchIds
+     * @param time in epoch seconds (unix time in seconds) and must be in a multiple of 5 minutes
+     */
     public void getMatchIds(long time){
         if(!callingAPI){
             GetIds call = new GetIds("https://na.api.pvp.net/api/lol/na/v4.1/game/ids?beginDate=" + time + "&api_key=" + ApiKey.API_KEY);
@@ -412,17 +439,26 @@ public class Main extends Application {
         
     }
     
+    
+    /**
+     * Gets a list of match Ids
+     * Uses a generic time
+     */
     public void getMatchIds(){
         long epoch = 1428198000;
         epoch = epoch + (((int) (Math.random() * 10)) * 300);
         getMatchIds(epoch);
-        
     }
     
-    //Called whenever a match is constructed from the api
+    
+    /**
+     * Called whenever a match is constructed from the api
+     * @param match The match containing all of the data retrieved
+     */
     public void recievedMatch(Match match){
         matchLength = match.getMatchDuration();
         System.out.println("Parsed Match");
+        
         //Add match to the match list
         matches.add(match);
         callingAPI = false;
@@ -434,33 +470,45 @@ public class Main extends Application {
            board[e].setImage(champs.get(e));
         }
         
-        //Play the song in a new thread
+        //Play the song in its own thread
         songRunnable = new PlaySong();
         Thread th = new Thread(songRunnable);
         th.start();
     }
-    //Called whenever a list of match ids is retrieved from the server
+    
+   
+    /**
+     * Called whenever a list of match ids is retrieved from the Riot API
+     * @param ids The ids retrieved from the API
+     */
     public void recievedMatchIds(ArrayList<Long> ids){
         System.out.println("Got Match Ids");
         
         if(ids != null){
             //Add the ids to the list
             matchIds.addAll(ids);
+            
             //Select the first id (Makes sure you don't have a blank spot selected)
-            
             pickMatches.getSelectionModel().select(0);
-            
         }
         callingAPI = false;
     }
     
     
-    //Used get a matches information from the riot api
+    /**
+     * Used to retrieve and parse a match through the Riot API
+     * Requires a URL to call
+     */
     class GetMatchInfo implements Runnable{
         
-        //url to retrieve from
+        /**
+         * url to retrieve from2
+        */
         public URL url;
         
+        /**
+         * @param url The URL to retrieve the Match Info from
+         */
         public GetMatchInfo(String url){
             try {
                 this.url = new URL(url);
@@ -470,16 +518,23 @@ public class Main extends Application {
         }
         
         
+        /**
+         * Retrieves and Parses a Match from the Riot API
+         * Uses url declared from the constructor
+         */
         @Override
         public void run() {
             callingAPI = true;
             HttpsURLConnection con = null;
             try {
+                //Open the connection
                 con = (HttpsURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.connect();
                 int statusCode = con.getResponseCode();
+                
                 if(statusCode == HttpsURLConnection.HTTP_OK){
+                    //Read in the result into a StringBuilder
                     BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line = null;
@@ -489,11 +544,11 @@ public class Main extends Application {
                     //Call callback on main (JavaFX) thread
                     Platform.runLater(() -> {
                         recievedMatch(JSONUtils.MatchParser.parseMatch(sb.toString()));
-                    });
-                        
+                    });   
                 }
             } catch (IOException e) {
-                //e.printStackTrace();
+                //If it fails (no internet connet/bad id, ect)
+                //Reset the progress bar
                 callingAPI = false;
                 Platform.runLater(() -> {
                     songPlaying.setProgress(1);
@@ -507,12 +562,25 @@ public class Main extends Application {
             }
         }
     }
-    //Used to get a set of match ids from the riot api
+    
+    /**
+     * Used to retrieve a list of Match Ids through the Riot API
+     * Requires a URL to call
+     */
     class GetIds implements Runnable{
 
+        /**
+         * url to retrieve from2
+        */
         URL url;
+        /**
+         * Contains the list of ids retrieved from the Riot API
+        */
         ArrayList<Long> ids;
         
+        /**
+         * @param url The URL to retrieve the Match Ids from
+         */
         public GetIds(String url){
             try {
                 this.url = new URL(url);
@@ -523,25 +591,31 @@ public class Main extends Application {
         }
         
         
+        /**
+         * Retrieves a list of match Ids from the Riot API 
+         * The url to retrieve from should be initialized in the constructor
+         */
         @Override
         public void run() {
             callingAPI = true;
             HttpsURLConnection con = null;
             ids = null;
             try {
+                 //Open the connection
                 con = (HttpsURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.connect();
                 int statusCode = con.getResponseCode();
                 if(statusCode == HttpsURLConnection.HTTP_OK){
+                    //Read in the result into a StringBuilder
                         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                         StringBuilder sb = new StringBuilder();
                         String line = null;
                         while((line = reader.readLine()) != null){
                                 sb.append(line);
                         }
+                        //Parse the ids
                         ids = (JSONUtils.MatchParser.parseIds(sb.toString()));
-                        System.out.println("after recieve");
                 }
             } catch (IOException e) {
                     //e.printStackTrace();
