@@ -19,7 +19,7 @@ import javafx.scene.paint.Color;
 
 /**
  * Arranges a group of 10 keys to create a keyboard. Each key is respective to each champion and their splash art.
- * @author Awkbak, BobJrSenior
+ * @author Awkbak BR, BobJrSenior
  */
 public class Keyboard extends Group{ 
     final private Key[] board;
