@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gegeizi;
 
 import java.util.ArrayList;
@@ -10,8 +5,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
- * @author user
+ * Contains Information about something that happened in a League Match
+ * @author Awkbak, Bobjrsenior
  */
 public class Event {
     
@@ -54,6 +49,12 @@ public class Event {
         assistIds = new ArrayList<>();
     }
     
+    /**
+     * Constructs an Event from a JSONObject
+     * Events are normally only created through by proxy through
+     * the Match.java constructor
+     * @param obj JSONObject containing the Event Information
+     */
     public Event(JSONObject obj){
         //Initialize ArrayLists
         assistIds = new ArrayList<>();
@@ -231,6 +232,4 @@ public class Event {
     public void setSkillSlot(long skillSlot) {
         this.skillSlot = skillSlot;
     }
-    
-    
 }

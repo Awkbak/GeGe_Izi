@@ -27,7 +27,6 @@ import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -59,7 +58,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Starts up and handles most of the operations of the Application.
  * 
- * @author Awkbak, BobJrSenior
+ * @author Awkbak, Bobjrsenior
  */
 public class Main extends Application {
     final int numevents = 7; //Number of Possible events. Change as needed.
@@ -290,6 +289,10 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Make sure the threads are closed before closing the UI
+     * @throws Exception 
+     */
     @Override
     public void stop() throws Exception {
         if(songRunnable != null){
@@ -308,13 +311,21 @@ public class Main extends Application {
          * Referes to what champion preformed an action
          */
         int sound = 1;
+        /**
+         * Controls when end the Runnable/song
+         */
         boolean keepPlaying = true;
         
-        //End the song/Close the thread
+        /**
+         * End the song/Close the thread
+         */
         public void terminate(){
             keepPlaying = false;
         }
         
+        /**
+         * Plays the Selected Match
+         */
         @Override
         public void run() {
             isPlaying = true;

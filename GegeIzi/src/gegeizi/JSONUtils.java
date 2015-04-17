@@ -13,16 +13,20 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- *
- * @author user
+ * Used in order to Parse JSON files into Java Objects
+ * @author Awkbak, Bobjrsenior
  */
 public class JSONUtils {
-    public static class ChampionParser{
-        
-        
-    }
-    //Parse mainly JSON objects into java objects
+
+    /**
+     * Used to Parse an input string into a Match
+     */
     public static class MatchParser{
+        /**
+         * Parses JSON into a Match object
+         * @param in JSON to convert into a Match
+         * @return A Match Object containing the data from the in param
+         */
         public static Match parseMatch(String in){
             try {
                 JSONObject obj = (JSONObject) new JSONParser().parse(in);
@@ -34,7 +38,11 @@ public class JSONUtils {
             
             return null;
         }
-        
+        /**
+         * Parses an array in String form into an ArrayList
+         * @param in String containing the array of ids
+         * @return ArrayList containing the ids from the in param
+         */
         public static ArrayList<Long> parseIds(String in){
             ArrayList<Long> ids = new ArrayList<>();
             //Split the returned (non-json) list into just spaces and longs
@@ -49,10 +57,4 @@ public class JSONUtils {
             
         }
     }
-    
-    public static class CurrentMatchParser{
-        
-    }
-    
-    
 }

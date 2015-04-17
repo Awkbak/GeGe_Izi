@@ -1,7 +1,5 @@
 package gegeizi;
 
-
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
@@ -121,15 +119,6 @@ public class Key extends Rectangle {
             //Play the sound
             animate.playFromStart();
             channels[channel].noteOn(note, volume);
-            /*Thread th = new Thread(() -> {
-                long time = System.currentTimeMillis() + 200;
-                while(System.currentTimeMillis() < time){
-                    
-                }
-                channels[channel].noteOff(note);
-            });
-            th.start();
-            */
         }
         catch (Exception e) {
             //e.printStackTrace();
@@ -137,7 +126,6 @@ public class Key extends Rectangle {
     }
     
     public void closeSynth(){
-        //channels[channel].
         synth.close();
     }
     
@@ -150,7 +138,7 @@ public class Key extends Rectangle {
     }  
     /**
      * Changes the instrument played by the pressed key.
-     * @param program 
+     * @param program What instrument to change to
      */
     public void setInstrument(int program){
         this.channels[channel].programChange(program);

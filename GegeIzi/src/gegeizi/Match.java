@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gegeizi;
 
 import java.util.ArrayList;
@@ -10,8 +5,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
- * @author user
+ * Holds all of the data for a particular League Match
+ * @author Awkbak, Bobjrsenior
  */
 public class Match {
     private long mapId;
@@ -35,9 +30,12 @@ public class Match {
         participants = new ArrayList<>();
     }
     
-    //Recieves a JSONObject containing all Match Information and Parses it
-    //By initializing the Match class variables and calling
-    //The JSONObject Constructor on all linked classes
+    /**
+     * Receives a JSONObject containing all Match Information and Parses it
+     * By initializing the Match class variables and calling
+     * The JSONObject Constructor on all linked classes
+     * @param obj The JSONObject containing Match Data
+     */
     public Match(JSONObject obj){
         //Initialize ArrayLists
         teams = new ArrayList<>();
@@ -68,7 +66,43 @@ public class Match {
             teams.add(new Team((JSONObject) arr1));
         }
     }
+    
+    /**
+     * Retrieve all events in the match
+     * @return An ArrayList of every Event in the match 
+     */
+    public ArrayList<Event> getEventList(){
+        ArrayList<Event> events = new ArrayList<>();
+        ArrayList<Frame> frames = timeline.getFrames();
+        frames.stream().forEach((frame) -> {
+            events.addAll(frame.getEvents());
+        });
+        return events;
+    }
+    
+    /**
+     * Returns the Champion Id associated with a particular summoner
+     * @param participantId The participantId of the 
+     * @return The Champion Id of the summoners champion
+     */
+    public int getChampionId(int participantId){
+        return (int) participants.get(participantId).getChampionId();
+    }
+    
+    /**
+     * Retrieves the champion id of all champions in the match
+     * @return An ArrayLIst of champion Ids index corresponds to the Summoners in Participants list
+     */
+    public ArrayList<Integer> getChampionIds(){
+        ArrayList<Integer> ids = new ArrayList<>();
+        participants.stream().forEach((e) -> {
+            ids.add((int) e.getChampionId());
+        });
+        return ids;
+    }
 
+    
+    //Getters and Setters
     public long getMapId() {
         return mapId;
     }
@@ -187,26 +221,5 @@ public class Match {
     
     public void addTeam(Team team){
         teams.add(team);
-    }
-    
-    public ArrayList<Event> getEventList(){
-        ArrayList<Event> events = new ArrayList<>();
-        ArrayList<Frame> frames = timeline.getFrames();
-        for(Frame frame : frames){
-            events.addAll(frame.getEvents());
-        }
-        return events;
-    }
-    
-    public int getChampionId(int participantId){
-        return (int) participants.get(participantId).getChampionId();
-    }
-    
-    public ArrayList<Integer> getChampionIds(){
-        ArrayList<Integer> ids = new ArrayList<>();
-        for(Participant e : participants){
-            ids.add((int) e.getChampionId());
-        }
-        return ids;
     }
 }
