@@ -208,8 +208,10 @@ public class Main extends Application {
             //Get all events
             ArrayList<Event> events = matches.get(0).getEventList();
             matches.remove(0);
+            
             spinDisk();
            
+            //STart the play timer
             long time = System.currentTimeMillis();
             //Go through every event
             for(Event e : events){
@@ -241,21 +243,24 @@ public class Main extends Application {
                     play = true;
                 }
                 if(play){
-                    //Get the sond based on participantId
+                    //Get the sound/key to play based on participantId
                     sound = (int) e.getParticipantId() - 1;
-                    if(sound == -1){
-                        sound = 0;
+                    
+                    //If it's not a minion kill
+                    if(sound != -1){
+                         mainKeyboard.PlaySound(sound);
                     }
-                    //Play sound on JavaFX thread (Can only play a sound on that thread)
-                    Platform.runLater(() -> {
-                        mainKeyboard.PlaySound(sound);
-                    });
                 }
             }
             //Finish the progress bar
             Platform.runLater(()->{
                 songPlaying.setProgress(1);
             });
+            //Let the last sound finish before closing synths
+            time = System.currentTimeMillis();
+            while(System.currentTimeMillis() - time < 500){
+                
+            }
             //Close the midi synth on keys
             for(Key e : mainKeyboard.getBoard()){
                 e.closeSynth();
