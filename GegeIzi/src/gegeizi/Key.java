@@ -57,7 +57,7 @@ public class Key extends Rectangle {
         tonePlayer = null;
         //tonePlayer = new MediaPlayer(tone);
         
-        animate = new FadeTransition(Duration.millis(50),this);
+        animate = new FadeTransition(Duration.millis(70),this);
         animate.setFromValue(1.0);
         animate.setToValue(0.5);
         animate.setCycleCount(2);
@@ -72,7 +72,7 @@ public class Key extends Rectangle {
         this.setArcWidth(5);
         
         channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
-        volume = 80; // between 0 et 127
+        volume = 80; // between 0 and 127
         duration = 50; // in milliseconds
         
         switch (s) {
