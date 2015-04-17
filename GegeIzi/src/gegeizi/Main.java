@@ -308,7 +308,7 @@ public class Main extends Application {
     class PlaySong implements Runnable{
 
         /**
-         * Referes to what champion preformed an action
+         * References to what champion preformed an action
          */
         int sound = 1;
         /**
