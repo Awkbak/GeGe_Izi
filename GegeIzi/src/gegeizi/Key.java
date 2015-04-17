@@ -37,6 +37,7 @@ public class Key extends Rectangle {
     private int note; //Pitch of the sound
     private int channel; //Instrument
     private int volume; //Sound volume
+    private int program = 1;
     private FadeTransition animate; //Animation for when the key is pressed.
     /**
      * Constructor method. Generates the key according to its sound. Also makes the graphics for the keys.
@@ -123,6 +124,7 @@ public class Key extends Rectangle {
         if(!synth.isOpen()){
             try {
                 synth.open();
+                channels[channel].programChange(program);
             } catch (MidiUnavailableException ex) {
                 Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -145,6 +147,7 @@ public class Key extends Rectangle {
     public void openSynth(){
         try {
             synth.open();
+            channels[channel].programChange(program);
         } catch (MidiUnavailableException ex) {
             Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -154,6 +157,7 @@ public class Key extends Rectangle {
      * @param program What instrument to change to
      */
     public void setInstrument(int program){
+        this.program = program;
         this.channels[channel].programChange(program);
     }
 }

@@ -212,7 +212,7 @@ public class Main extends Application {
         pickInstrument.relocate(570, 350);
         //Set on change listener to Instrument list
         pickInstrument.setOnAction((event) -> {
-            //CHange what instrument will play
+            //Change what instrument will play
             mainKeyboard.setInstrument((String) pickInstrument.getSelectionModel().getSelectedItem());
         });
         
