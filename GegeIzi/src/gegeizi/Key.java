@@ -98,7 +98,7 @@ public class Key extends Rectangle {
             this.synth = MidiSystem.getSynthesizer();
             this.synth.open();
             this.channels = synth.getChannels();
-            this.channels[channel].programChange(102);
+            this.channels[channel].programChange(80);
         } catch (MidiUnavailableException ex) {
             Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -125,18 +125,15 @@ public class Key extends Rectangle {
             //Play the sound
             animate.playFromStart();
             channels[channel].noteOn(note, volume);
-            Thread th = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    long time = System.currentTimeMillis() + 200;
-                    while(System.currentTimeMillis() < time){
-
-                    }
-                    channels[channel].noteOff(note);
+            Thread th = new Thread(() -> {
+                long time = System.currentTimeMillis() + 200;
+                while(System.currentTimeMillis() < time){
+                    
                 }
+                channels[channel].noteOff(note);
             });
             th.start();
+            
         }
         catch (Exception e) {
             //e.printStackTrace();

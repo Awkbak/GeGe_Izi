@@ -45,12 +45,19 @@ public class Keyboard extends Group{
     
     public void setInstrument(String instrument){
         int program = 0;
-        if(instrument.equals("Piano")){
-            program = 0;
-            
-        }
-        else if(instrument.equals("Percussion")){
-            program = 9;
+        switch (instrument) {
+            case "Piano":
+                program = 0;
+                break;
+            case "Percussion":
+                program = 9;
+                break;
+            case "Tuba":
+                program = 59;
+                break;
+            case "Ocarina":
+                program = 80;
+                break;
         }
         for(Key e : board){
             e.setInstrument(0);
