@@ -20,7 +20,7 @@ import org.json.simple.JSONObject;
 
 /**
  * Holds all of the data for a particular League Match
- * @author Awkbak, Bobjrsenior
+ * @author Awkbak BR, Bobjrsenior
  */
 public class Match {
     private long mapId;

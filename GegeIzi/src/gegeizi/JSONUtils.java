@@ -22,7 +22,7 @@ import org.json.simple.parser.ParseException;
 
 /**
  * Used in order to Parse JSON files into Java Objects
- * @author Awkbak, Bobjrsenior
+ * @author Awkbak BR, Bobjrsenior
  */
 public class JSONUtils {
 

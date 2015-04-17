@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 
 /**
  * Gets the championIDs and the turn they were picked from the JSON object
- * @author Awkbak BR, BobJrSenior
+ * @author Awkbak BR, Bobjrsenior
  */
 public class BanTuple {
     private final long championId;

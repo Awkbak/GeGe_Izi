@@ -28,7 +28,7 @@ import javax.sound.midi.Synthesizer;
 
 /**
  * Musical key that when pressed generates a marvelous sound.
- * @author Awkbak, BobJrSenior
+ * @author Awkbak BR, Bobjrsenior
  */
 public class Key extends Rectangle {
     private Image mainimage; //Champion image for the key
