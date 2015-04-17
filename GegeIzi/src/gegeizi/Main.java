@@ -58,7 +58,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Starts up and handles most of the operations of the Application.
  * 
- * @author Awkbak, Bobjrsenior
+ * @author Awkbak BR, Bobjrsenior
  */
 public class Main extends Application {
     final int numevents = 7; //Number of Possible events. Change as needed.
@@ -105,10 +105,7 @@ public class Main extends Application {
                 int x = allBoxes.getChildren().indexOf(k);
                 eventTypes[x] = newValue;
             });
-            if(i==0)
-            eventTypes[i] = true;
-            else
-                eventTypes[i] = false;
+            eventTypes[i] = i==0;
         }
     }
     /**
@@ -558,7 +555,7 @@ public class Main extends Application {
                     //Read in the result into a StringBuilder
                     BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     StringBuilder sb = new StringBuilder();
-                    String line = null;
+                    String line;
                     while((line = reader.readLine()) != null){
                             sb.append(line);
                     }
@@ -631,7 +628,7 @@ public class Main extends Application {
                     //Read in the result into a StringBuilder
                         BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                         StringBuilder sb = new StringBuilder();
-                        String line = null;
+                        String line;
                         while((line = reader.readLine()) != null){
                                 sb.append(line);
                         }

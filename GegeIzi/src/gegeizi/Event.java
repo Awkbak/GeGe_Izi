@@ -19,7 +19,7 @@ import org.json.simple.JSONObject;
 
 /**
  * Contains Information about something that happened in a League Match
- * @author Awkbak, Bobjrsenior
+ * @author Awkbak BR, Bobjrsenior
  */
 public class Event {
     
@@ -96,9 +96,9 @@ public class Event {
                 position = new Position((JSONObject) obj.get("position"));
                 if(obj.containsKey("assistingParticipantIds")){
                     JSONArray arr = (JSONArray) obj.get("assistingParticipantIds");
-                    for (int e = 0; e < arr.size(); e ++) {
-                        assistIds.add((long) arr.get(e));
-                    }
+                    arr.stream().forEach((arr1) -> {
+                        assistIds.add((long) arr1);
+                    });
                 }
                 
                 participantId = killerId;                
