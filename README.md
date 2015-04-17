@@ -1,8 +1,7 @@
 # GeGe_Izi
 
 ©Awkbak BR, Bobjrsenior
-º⌐⌐º
- 
+
 Sounds of URF
 Goal: To create an interactive Application that generates a sound sequence based off the outcome of game IDs.
 Description: Imports game data from a 'League of Legends' match using Riot Games API.
