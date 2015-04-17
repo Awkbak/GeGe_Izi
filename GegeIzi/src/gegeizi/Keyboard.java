@@ -46,10 +46,10 @@ public class Keyboard extends Group{
     public void setInstrument(String instrument){
         int program = 0;
         switch (instrument) {
-            case "Acoustic Grand Piano":
+            case "Acoustic Piano":
                 program = 0;
                 break;
-            case "Bright Grand Piano":
+            case "Bright Piano":
                 program = 2;
                 break;
             case "Xylophone":
@@ -58,13 +58,13 @@ public class Keyboard extends Group{
             case "Gunshots":
                 program = 128;
                 break;
-            case "Honky-tonk Piano":
+            case "Honky Piano":
                 program = 4;
                 break;
             case "Melodic Drum":
                 program = 118;
                 break;
-            case "Harpsicord":
+            case "Harpsichord":
                 program = 7;
                 break;
         }
