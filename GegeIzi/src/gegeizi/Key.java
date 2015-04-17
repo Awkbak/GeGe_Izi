@@ -5,10 +5,7 @@ package gegeizi;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
-
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -19,27 +16,21 @@ import javax.sound.midi.Synthesizer;
 
 
 /**
- *
- * @author Awkbak
+ * Musical key that when pressed generates a marvelous sound.
+ * @author Awkbak, BobJrSenior
  */
 public class Key extends Rectangle {
-    private Image mainimage;
-    private Synthesizer synth;
-    private  MidiChannel[] channels;
-    private int note;
+    private Image mainimage; //Champion image for the key
+    private Synthesizer synth; //MIDI synthesizer to generate sound
+    private  MidiChannel[] channels; //Where the sounds are stored
+    private int note; //Pitch of the sound
     private int channel; //Instrument
-    private int volume;
-    private FadeTransition animate;
-    
-    public Key(){
-        this.setWidth(50);
-        this.setHeight(140);
-        this.setStrokeWidth(3);
-        this.setStroke(Color.STEELBLUE);
-        this.setFill(Color.SNOW);
-        this.setArcHeight(5);
-        this.setArcWidth(5);
-    }
+    private int volume; //Sound volume
+    private FadeTransition animate; //Animation for when the key is pressed.
+    /**
+     * Constructor method. Generates the key according to its sound. Also makes the graphics for the keys.
+     * @param s 
+     */
     public Key(String s){
        
         animate = new FadeTransition(Duration.millis(70),this);
@@ -51,14 +42,12 @@ public class Key extends Rectangle {
         this.setWidth(50);
         this.setHeight(140);
         this.setStrokeWidth(3);
-        this.setStroke(Color.STEELBLUE);
-        this.setFill(Color.SNOW);
         this.setArcHeight(5);
         this.setArcWidth(5);
         
         channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
         volume = 80; // between 0 and 127
-        int octave = 12;
+        int octave = 12;//Changes the octave of the keys appropriately
         //Choose the correct note based on the key
         switch (s) {
             case "0":
@@ -104,12 +93,19 @@ public class Key extends Rectangle {
         }
         
     }
+    /**
+     * Changes the image of the key according to the champion IDs.
+     * @param imID 
+     */
     public void setImage(int imID){
         String ad = "Splash/" + imID +".jpg";
         mainimage = new Image(getClass().getResourceAsStream(ad),50,140,false,false);
         ImagePattern min = new ImagePattern(mainimage);
         this.setFill(min);
     }
+    /**
+     * Plays the sound stored within key. The result is a sweet melody.
+     */
     public void PlaySound(){
         
         //Make sure the channel synth is open before playing
@@ -152,7 +148,10 @@ public class Key extends Rectangle {
             Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
         }
     }  
-    
+    /**
+     * Changes the instrument played by the pressed key.
+     * @param program 
+     */
     public void setInstrument(int program){
         this.channels[channel].programChange(program);
     }
