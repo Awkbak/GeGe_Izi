@@ -58,47 +58,47 @@ public class Key extends Rectangle {
         
         channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
         volume = 80; // between 0 and 127
+        int octave = 12;
         //Choose the correct note based on the key
         switch (s) {
             case "0":
-                note = 45 + 12;
+                note = 45 + octave;
                 break;
             case "1":
-                note = 47 + 12;
+                note = 47 + octave;
                 break;
             case "2":
-                note = 48 + 12;
+                note = 48 + octave;
                 break;
             case "3":
-                note = 50 + 12;
+                note = 50 + octave;
                 break;
             case "4":
-                note = 52 + 12;
+                note = 52 + octave;
                 break;
             case "5":
-                note = 53 + 12;
+                note = 53 + octave;
                 break;
             case "6":
-                note = 55 + 12;
+                note = 55 + octave;
                 break;
             case "7":
-                note = 57 + 12;
+                note = 57 + octave;
                 break;
             case "8":
-                note = 59 + 12;
+                note = 59 + octave;
                 break;
             case "9":
-                note = 60 + 12;
+                note = 60 + octave;
                 break;
             default:
-                note = 40;
+                note = 40 + octave;
                 break;
         }
         try {
             this.synth = MidiSystem.getSynthesizer();
             this.synth.open();
             this.channels = synth.getChannels();
-            this.channels[channel].programChange(80);
         } catch (MidiUnavailableException ex) {
             Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -125,7 +125,7 @@ public class Key extends Rectangle {
             //Play the sound
             animate.playFromStart();
             channels[channel].noteOn(note, volume);
-            Thread th = new Thread(() -> {
+            /*Thread th = new Thread(() -> {
                 long time = System.currentTimeMillis() + 200;
                 while(System.currentTimeMillis() < time){
                     
@@ -133,7 +133,7 @@ public class Key extends Rectangle {
                 channels[channel].noteOff(note);
             });
             th.start();
-            
+            */
         }
         catch (Exception e) {
             //e.printStackTrace();

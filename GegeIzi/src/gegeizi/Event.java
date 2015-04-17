@@ -25,7 +25,7 @@ public class Event {
     private Position position;
     
     
-    
+    //Item Purchased
     private long itemId;    
       
     
@@ -72,6 +72,7 @@ public class Event {
             participantId = (long) obj.get("creatorId");
         }
         
+        //Store the related variables for the eventType
         //Not necasary for this project, but nice to have implemented (even partially)
         switch(eventType){
             case "CHAMPION_KILL":
@@ -116,9 +117,6 @@ public class Event {
                 participantId = (long) obj.get("killerId");
                 break;
         }
-        
-        //itemId = (int) obj.get("itemID");
-        //participantId = (int) obj.get("participantId");
         timeStamp = (long) obj.get("timestamp");
     }
 

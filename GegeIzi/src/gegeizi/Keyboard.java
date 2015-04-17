@@ -46,21 +46,30 @@ public class Keyboard extends Group{
     public void setInstrument(String instrument){
         int program = 0;
         switch (instrument) {
-            case "Piano":
+            case "Acoustic Grand Piano":
                 program = 0;
                 break;
-            case "Percussion":
-                program = 9;
+            case "Bright Grand Piano":
+                program = 2;
                 break;
-            case "Tuba":
-                program = 59;
+            case "Xylophone":
+                program = 14;
                 break;
-            case "Ocarina":
-                program = 80;
+            case "Gunshots":
+                program = 128;
+                break;
+            case "Honky-tonk Piano":
+                program = 4;
+                break;
+            case "Melodic Drum":
+                program = 118;
+                break;
+            case "Harpsicord":
+                program = 7;
                 break;
         }
         for(Key e : board){
-            e.setInstrument(0);
+            e.setInstrument(program);
         }
     }
 }
