@@ -2,14 +2,12 @@ package gegeizi;
 
 
 
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
-
+import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -26,21 +24,14 @@ import javax.sound.midi.Synthesizer;
  */
 public class Key extends Rectangle {
     private Image mainimage;
-    final private URL resource;
-    final private Media tone;
-    private MediaPlayer tonePlayer;
     private Synthesizer synth;
     private  MidiChannel[] channels;
-    private int channel;
+    private int note;
+    private int channel; //Instrument
     private int volume;
     private FadeTransition animate;
-    private int duration;
-    private int note;
     
     public Key(){
-        resource = null;
-        tone = null;
-        tonePlayer = null;
         this.setWidth(50);
         this.setHeight(140);
         this.setStrokeWidth(3);
@@ -50,13 +41,7 @@ public class Key extends Rectangle {
         this.setArcWidth(5);
     }
     public Key(String s){
-        //resource = getClass().getResource(s);
-        //tone = new Media(resource.toString());
-        resource = null;
-        tone = null;
-        tonePlayer = null;
-        //tonePlayer = new MediaPlayer(tone);
-        
+       
         animate = new FadeTransition(Duration.millis(70),this);
         animate.setFromValue(1.0);
         animate.setToValue(0.5);
@@ -73,8 +58,7 @@ public class Key extends Rectangle {
         
         channel = 0; // 0 is a piano, 9 is percussion, other channels are for other instruments
         volume = 80; // between 0 and 127
-        duration = 50; // in milliseconds
-        
+        //Choose the correct note based on the key
         switch (s) {
             case "0":
                 note = 45 + 12;
@@ -114,6 +98,7 @@ public class Key extends Rectangle {
             this.synth = MidiSystem.getSynthesizer();
             this.synth.open();
             this.channels = synth.getChannels();
+            this.channels[channel].programChange(102);
         } catch (MidiUnavailableException ex) {
             Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -126,8 +111,8 @@ public class Key extends Rectangle {
         this.setFill(min);
     }
     public void PlaySound(){
-        animate.playFromStart();
-
+        
+        //Make sure the channel synth is open before playing
         if(!synth.isOpen()){
             try {
                 synth.open();
@@ -136,7 +121,22 @@ public class Key extends Rectangle {
             }
         }
         try {
+            
+            //Play the sound
+            animate.playFromStart();
             channels[channel].noteOn(note, volume);
+            Thread th = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    long time = System.currentTimeMillis() + 200;
+                    while(System.currentTimeMillis() < time){
+
+                    }
+                    channels[channel].noteOff(note);
+                }
+            });
+            th.start();
         }
         catch (Exception e) {
             //e.printStackTrace();
@@ -146,5 +146,17 @@ public class Key extends Rectangle {
     public void closeSynth(){
         //channels[channel].
         synth.close();
-    }   
+    }
+    
+    public void openSynth(){
+        try {
+            synth.open();
+        } catch (MidiUnavailableException ex) {
+            Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }  
+    
+    public void setInstrument(int program){
+        this.channels[channel].programChange(program);
+    }
 }

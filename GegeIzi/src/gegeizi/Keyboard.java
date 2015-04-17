@@ -42,4 +42,18 @@ public class Keyboard extends Group{
     public Key[] getBoard(){
         return board;
     }
+    
+    public void setInstrument(String instrument){
+        int program = 0;
+        if(instrument.equals("Piano")){
+            program = 0;
+            
+        }
+        else if(instrument.equals("Percussion")){
+            program = 9;
+        }
+        for(Key e : board){
+            e.setInstrument(0);
+        }
+    }
 }

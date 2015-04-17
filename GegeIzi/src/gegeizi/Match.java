@@ -35,6 +35,9 @@ public class Match {
         participants = new ArrayList<>();
     }
     
+    //Recieves a JSONObject containing all Match Information and Parses it
+    //By initializing the Match class variables and calling
+    //The JSONObject Constructor on all linked classes
     public Match(JSONObject obj){
         //Initialize ArrayLists
         teams = new ArrayList<>();
